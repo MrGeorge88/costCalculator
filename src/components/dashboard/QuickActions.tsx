@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { Plus, Package, ChefHat, Calculator } from 'lucide-react';
+import { Package, ChefHat, Calculator } from 'lucide-react';
 
 export function QuickActions() {
   const t = useTranslations('dashboard');
