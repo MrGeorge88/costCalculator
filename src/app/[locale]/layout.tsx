@@ -7,6 +7,24 @@ import '../globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+
+  return {
+    title: locale === 'es' ? 'Calculadora de Costos de Helados' : 'Ice Cream Cost Calculator',
+    description: locale === 'es'
+      ? 'Aplicación web para calcular costos de producción de helados con gestión de inventario y simulador de escenarios'
+      : 'Web application for calculating ice cream production costs with inventory management and scenario simulator',
+    icons: {
+      icon: '/favicon.ico',
+    },
+  };
+}
+
 export default async function LocaleLayout({
   children,
   params
