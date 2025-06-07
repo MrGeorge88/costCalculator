@@ -4,6 +4,9 @@ const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    _next_intl_trailing_slash: "false"
+  },
   experimental: {
     serverComponentsExternalPackages: ['@supabase/supabase-js'],
   },

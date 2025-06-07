@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'success';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'success' | 'warning';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   loading?: boolean;
   icon?: React.ReactNode;
@@ -32,7 +32,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-primary/20',
       ghost: 'text-gray-700 hover:bg-gray-100 focus:ring-gray-500/20 shadow-none hover:shadow-sm',
       danger: 'bg-danger text-white hover:bg-danger/90 focus:ring-danger/20',
-      success: 'bg-secondary text-white hover:bg-secondary/90 focus:ring-secondary/20'
+      success: 'bg-secondary text-white hover:bg-secondary/90 focus:ring-secondary/20',
+      warning: 'bg-warning text-white hover:bg-warning/90 focus:ring-warning/20'
     };
 
     const sizes = {

@@ -32,7 +32,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+  }, [isOpen, toggle, close]);
 
   // Close sidebar on mobile by default
   useEffect(() => {
