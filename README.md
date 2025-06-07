@@ -55,8 +55,8 @@ Una aplicación web moderna para calcular costos de producción de helados, gest
 
 1. **Clonar el repositorio**
 ```bash
-git clone https://github.com/tu-usuario/ice-cream-cost-calculator.git
-cd ice-cream-cost-calculator
+git clone https://github.com/MrGeorge88/costCalculator.git
+cd costCalculator
 ```
 
 2. **Instalar dependencias**
@@ -71,22 +71,16 @@ cp .env.local.example .env.local
 
 Edita `.env.local` con tus credenciales de Supabase:
 ```env
-NEXT_PUBLIC_SUPABASE_URL=tu_url_de_supabase
+NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_clave_anonima
-SUPABASE_SERVICE_ROLE_KEY=tu_clave_de_servicio
+NODE_ENV=production
 ```
 
 4. **Configurar base de datos**
-```bash
-# Instalar Supabase CLI
-npm install -g supabase
-
-# Ejecutar migraciones
-supabase db push
-
-# Opcional: Cargar datos de ejemplo
-supabase db reset --with-seed
-```
+- Ve a tu proyecto en Supabase
+- Abre el SQL Editor
+- Ejecuta el script `SUPABASE_PRODUCTION_SETUP.sql`
+- Esto creará todas las tablas, funciones y políticas necesarias
 
 5. **Iniciar servidor de desarrollo**
 ```bash
@@ -167,8 +161,6 @@ Los archivos de traducción se encuentran en `/messages/`.
 
 ### Para Supabase
 - `SUPABASE_PRODUCTION_SETUP.sql` - Script completo para configurar la base de datos
-- `SUPABASE_SAMPLE_DATA.sql` - Datos de ejemplo para testing
-- `supabase/migrations/` - Migraciones versionadas
 
 ### Para Producción
 - `PRODUCTION_ROADMAP.md` - Roadmap detallado para despliegue
@@ -186,9 +178,9 @@ Los archivos de traducción se encuentran en `/messages/`.
 ### Variables de Entorno para Producción
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=tu_url_de_supabase
+NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_clave_anonima
-SUPABASE_SERVICE_ROLE_KEY=tu_clave_de_servicio
+NODE_ENV=production
 ```
 
 ## 📚 Documentación

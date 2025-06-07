@@ -3,6 +3,8 @@ import { getMessages } from 'next-intl/server';
 import { Inter } from 'next/font/google';
 import { Navbar } from '@/components/layout/Navbar';
 import { Sidebar } from '@/components/layout/Sidebar';
+import { SidebarProvider } from '@/contexts/SidebarContext';
+import { MainContent } from '@/components/layout/MainContent';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -41,22 +43,15 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <body className={`${inter.className} min-h-screen bg-gray-50`} style={{ minHeight: '100vh', backgroundColor: '#f8fafc', margin: '0', padding: '0' }}>
         <NextIntlClientProvider messages={messages}>
-          <div className="min-h-screen bg-gray-50" style={{ minHeight: '100vh', backgroundColor: '#f8fafc', position: 'relative' }}>
-            <Navbar />
-            <Sidebar />
-            <main
-              className="flex-1 p-6 ml-64 main-content"
-              style={{
-                marginLeft: '16rem',
-                marginTop: '4rem',
-                padding: '1.5rem',
-                minHeight: 'calc(100vh - 4rem)',
-                backgroundColor: '#f8fafc'
-              }}
-            >
-              {children}
-            </main>
-          </div>
+          <SidebarProvider>
+            <div className="min-h-screen bg-gray-50" style={{ minHeight: '100vh', backgroundColor: '#f8fafc', position: 'relative' }}>
+              <Navbar />
+              <Sidebar />
+              <MainContent>
+                {children}
+              </MainContent>
+            </div>
+          </SidebarProvider>
         </NextIntlClientProvider>
       </body>
     </html>

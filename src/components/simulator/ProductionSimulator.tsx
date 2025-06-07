@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Factory, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select, SelectOption } from '@/components/ui/Select';
+import { useRecipes } from '@/hooks/useRecipes';
 
 interface ProductionScenario {
   id: string;
@@ -20,47 +21,29 @@ export function ProductionSimulator() {
   const t = useTranslations('simulator');
   const [selectedRecipe, setSelectedRecipe] = useState('');
   const [productionVolume, setProductionVolume] = useState('');
+  const [estimatedPrice, setEstimatedPrice] = useState('');
   const [scenarios, setScenarios] = useState<ProductionScenario[]>([]);
 
-  // Mock data
-  const recipeOptions: SelectOption[] = [
-    { value: '1', label: 'Helado de Vainilla Clásico' },
-    { value: '2', label: 'Helado de Chocolate' },
-    { value: '3', label: 'Sorbete de Fresa' }
-  ];
+  const { recipes, loading, error } = useRecipes();
 
-  const mockRecipeData = {
-    '1': {
-      name: 'Helado de Vainilla Clásico',
-      costPerLiter: 4.50,
-      pricePerLiter: 8.00,
-      yieldUnit: 'litros'
-    },
-    '2': {
-      name: 'Helado de Chocolate',
-      costPerLiter: 5.20,
-      pricePerLiter: 9.50,
-      yieldUnit: 'litros'
-    },
-    '3': {
-      name: 'Sorbete de Fresa',
-      costPerLiter: 3.80,
-      pricePerLiter: 7.00,
-      yieldUnit: 'litros'
-    }
-  };
+  const recipeOptions: SelectOption[] = recipes.map(recipe => ({
+    value: recipe.id,
+    label: recipe.nombre
+  }));
+
+  const selectedRecipeData = recipes.find(recipe => recipe.id === selectedRecipe);
 
   const calculateProduction = () => {
-    if (!selectedRecipe || !productionVolume) return;
-
-    const recipe = mockRecipeData[selectedRecipe as keyof typeof mockRecipeData];
-    if (!recipe) return;
+    if (!selectedRecipe || !productionVolume || !estimatedPrice || !selectedRecipeData) return;
 
     const volume = parseFloat(productionVolume);
-    const totalCost = recipe.costPerLiter * volume;
-    const totalRevenue = recipe.pricePerLiter * volume;
+    const pricePerLiter = parseFloat(estimatedPrice);
+    const costPerLiter = selectedRecipeData.costo_total / (selectedRecipeData.rendimiento || 1);
+
+    const totalCost = costPerLiter * volume;
+    const totalRevenue = pricePerLiter * volume;
     const profit = totalRevenue - totalCost;
-    const profitMargin = (profit / totalRevenue) * 100;
+    const profitMargin = totalRevenue > 0 ? (profit / totalRevenue) * 100 : 0;
 
     const newScenario: ProductionScenario = {
       id: Date.now().toString(),
@@ -81,7 +64,33 @@ export function ProductionSimulator() {
     }).format(amount);
   };
 
-  const selectedRecipeData = selectedRecipe ? mockRecipeData[selectedRecipe as keyof typeof mockRecipeData] : null;
+  if (loading) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="flex items-center space-x-2 mb-6">
+          <Factory className="w-5 h-5 text-green-600" />
+          <h2 className="text-lg font-semibold text-gray-900">{t('productionSimulator')}</h2>
+        </div>
+        <div className="text-center py-8">
+          <div className="text-gray-500">Cargando recetas...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="flex items-center space-x-2 mb-6">
+          <Factory className="w-5 h-5 text-green-600" />
+          <h2 className="text-lg font-semibold text-gray-900">{t('productionSimulator')}</h2>
+        </div>
+        <div className="text-center py-8">
+          <div className="text-red-500">Error al cargar las recetas</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -101,19 +110,33 @@ export function ProductionSimulator() {
 
         {selectedRecipeData && (
           <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="font-medium text-gray-900 mb-2">Datos por Litro</h3>
+            <h3 className="font-medium text-gray-900 mb-2">Datos de la Receta</h3>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="text-gray-500">Costo:</span>
-                <span className="ml-2 font-medium">{formatCurrency(selectedRecipeData.costPerLiter)}</span>
+                <span className="text-gray-500">Costo Total:</span>
+                <span className="ml-2 font-medium">{formatCurrency(selectedRecipeData.costo_total)}</span>
               </div>
               <div>
-                <span className="text-gray-500">Precio Venta:</span>
-                <span className="ml-2 font-medium">{formatCurrency(selectedRecipeData.pricePerLiter)}</span>
+                <span className="text-gray-500">Rendimiento:</span>
+                <span className="ml-2 font-medium">{selectedRecipeData.rendimiento || 1} {selectedRecipeData.unidad_rendimiento || 'litros'}</span>
+              </div>
+              <div>
+                <span className="text-gray-500">Costo por Litro:</span>
+                <span className="ml-2 font-medium">{formatCurrency(selectedRecipeData.costo_total / (selectedRecipeData.rendimiento || 1))}</span>
               </div>
             </div>
           </div>
         )}
+
+        <Input
+          label="Precio de Venta Estimado (por litro)"
+          type="number"
+          step="0.01"
+          min="0"
+          value={estimatedPrice}
+          onChange={(e) => setEstimatedPrice(e.target.value)}
+          placeholder="Ej: 8.50"
+        />
 
         <div className="flex space-x-2">
           <Input
@@ -126,7 +149,7 @@ export function ProductionSimulator() {
             placeholder="Ej: 10"
           />
           <div className="flex items-end">
-            <Button onClick={calculateProduction} disabled={!selectedRecipe || !productionVolume}>
+            <Button onClick={calculateProduction} disabled={!selectedRecipe || !productionVolume || !estimatedPrice}>
               Calcular
             </Button>
           </div>
@@ -177,7 +200,7 @@ export function ProductionSimulator() {
                   <div className="bg-purple-50 rounded p-3">
                     <span className="text-purple-600 text-xs font-medium">PUNTO EQUILIBRIO</span>
                     <div className="font-bold text-purple-700">
-                      {(scenario.totalCost / selectedRecipeData!.pricePerLiter).toFixed(1)}L
+                      {(scenario.totalCost / parseFloat(estimatedPrice)).toFixed(1)}L
                     </div>
                   </div>
                 </div>

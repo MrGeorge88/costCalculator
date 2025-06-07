@@ -2,19 +2,12 @@ import { useTranslations } from 'next-intl';
 import { DashboardStats } from '@/components/dashboard/DashboardStats';
 import { RecentActivity } from '@/components/dashboard/RecentActivity';
 import { QuickActions } from '@/components/dashboard/QuickActions';
-import { TailwindTest } from '@/components/test/TailwindTest';
-import { CalculationTest } from '@/components/test/CalculationTest';
-import { LayoutTest } from '@/components/test/LayoutTest';
 
 export default function HomePage() {
   const t = useTranslations('dashboard');
 
   return (
     <div className="space-y-6" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      <LayoutTest />
-
-      <TailwindTest />
-
       <div style={{ marginBottom: '1.5rem' }}>
         <h1 className="text-3xl font-bold text-gray-900" style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#1f2937', marginBottom: '0.5rem' }}>
           {t('title')}
@@ -25,8 +18,6 @@ export default function HomePage() {
       </div>
 
       <DashboardStats />
-
-      <CalculationTest />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
         <QuickActions />

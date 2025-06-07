@@ -3,10 +3,12 @@
 import { useTranslations } from 'next-intl';
 import { LanguageSelector } from './LanguageSelector';
 import { UserMenu } from './UserMenu';
-import { Bell, Search } from 'lucide-react';
+import { Bell, Search, Menu, X } from 'lucide-react';
+import { useSidebar } from '@/contexts/SidebarContext';
 
 export function Navbar() {
   const t = useTranslations('common');
+  const { isOpen, toggle } = useSidebar();
 
   return (
     <nav
@@ -24,6 +26,28 @@ export function Navbar() {
       <div className="px-6 py-4" style={{ padding: '1rem 1.5rem' }}>
         <div className="flex items-center justify-between" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div className="flex items-center space-x-4" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            {/* Menu Toggle Button */}
+            <button
+              onClick={toggle}
+              className="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+              style={{
+                padding: '0.5rem',
+                borderRadius: '0.5rem',
+                color: '#6b7280',
+                backgroundColor: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              aria-label="Toggle sidebar"
+            >
+              {isOpen ? (
+                <X style={{ width: '1.5rem', height: '1.5rem' }} />
+              ) : (
+                <Menu style={{ width: '1.5rem', height: '1.5rem' }} />
+              )}
+            </button>
+
             <div className="flex items-center space-x-2" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <div
                 className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center"

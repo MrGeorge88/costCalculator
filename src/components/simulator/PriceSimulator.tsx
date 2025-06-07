@@ -6,6 +6,7 @@ import { Calculator, TrendingUp, TrendingDown } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select, SelectOption } from '@/components/ui/Select';
+import { useRecipes } from '@/hooks/useRecipes';
 
 interface PriceScenario {
   id: string;
@@ -19,44 +20,29 @@ export function PriceSimulator() {
   const t = useTranslations('simulator');
   const [selectedRecipe, setSelectedRecipe] = useState('');
   const [priceChange, setPriceChange] = useState('');
+  const [currentPrice, setCurrentPrice] = useState('');
   const [scenarios, setScenarios] = useState<PriceScenario[]>([]);
 
-  // Mock data
-  const recipeOptions: SelectOption[] = [
-    { value: '1', label: 'Helado de Vainilla Clásico' },
-    { value: '2', label: 'Helado de Chocolate' },
-    { value: '3', label: 'Sorbete de Fresa' }
-  ];
+  const { recipes, loading, error } = useRecipes();
 
-  const mockRecipeData = {
-    '1': {
-      name: 'Helado de Vainilla Clásico',
-      currentCost: 4.50,
-      currentPrice: 8.00,
-      currentMargin: 77.8,
-      ingredients: [
-        { name: 'Leche Entera', cost: 0.75, percentage: 16.7 },
-        { name: 'Crema de Leche', cost: 0.64, percentage: 14.2 },
-        { name: 'Azúcar Refinada', cost: 0.12, percentage: 2.7 },
-        { name: 'Vainilla Natural', cost: 2.50, percentage: 55.6 },
-        { name: 'Huevos', cost: 0.60, percentage: 13.3 }
-      ]
-    }
-  };
+  const recipeOptions: SelectOption[] = recipes.map(recipe => ({
+    value: recipe.id,
+    label: recipe.nombre
+  }));
+
+  const selectedRecipeData = recipes.find(recipe => recipe.id === selectedRecipe);
 
   const calculateScenario = () => {
-    if (!selectedRecipe || !priceChange) return;
-
-    const recipe = mockRecipeData[selectedRecipe as keyof typeof mockRecipeData];
-    if (!recipe) return;
+    if (!selectedRecipe || !priceChange || !currentPrice || !selectedRecipeData) return;
 
     const changePercent = parseFloat(priceChange) / 100;
-    const newCost = recipe.currentCost * (1 + changePercent);
-    const newMargin = ((recipe.currentPrice - newCost) / recipe.currentPrice) * 100;
+    const newCost = selectedRecipeData.costo_total * (1 + changePercent);
+    const price = parseFloat(currentPrice);
+    const newMargin = price > 0 ? ((price - newCost) / price) * 100 : 0;
 
     const newScenario: PriceScenario = {
       id: Date.now().toString(),
-      name: `Cambio ${priceChange}% en ingredientes`,
+      name: `Cambio ${priceChange}% en costos de ingredientes`,
       ingredientChanges: { all: parseFloat(priceChange) },
       totalCostChange: changePercent,
       newMargin: newMargin
@@ -72,7 +58,36 @@ export function PriceSimulator() {
     }).format(amount);
   };
 
-  const selectedRecipeData = selectedRecipe ? mockRecipeData[selectedRecipe as keyof typeof mockRecipeData] : null;
+  if (loading) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="flex items-center space-x-2 mb-6">
+          <Calculator className="w-5 h-5 text-blue-600" />
+          <h2 className="text-lg font-semibold text-gray-900">{t('priceSimulator')}</h2>
+        </div>
+        <div className="text-center py-8">
+          <div className="text-gray-500">Cargando recetas...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="flex items-center space-x-2 mb-6">
+          <Calculator className="w-5 h-5 text-blue-600" />
+          <h2 className="text-lg font-semibold text-gray-900">{t('priceSimulator')}</h2>
+        </div>
+        <div className="text-center py-8">
+          <div className="text-red-500">Error al cargar las recetas</div>
+        </div>
+      </div>
+    );
+  }
+
+  const currentMargin = selectedRecipeData && currentPrice ?
+    ((parseFloat(currentPrice) - selectedRecipeData.costo_total) / parseFloat(currentPrice)) * 100 : 0;
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -90,21 +105,31 @@ export function PriceSimulator() {
           placeholder="Elegir receta para simular"
         />
 
-        {selectedRecipeData && (
+        <Input
+          label="Precio de Venta Actual"
+          type="number"
+          step="0.01"
+          min="0"
+          value={currentPrice}
+          onChange={(e) => setCurrentPrice(e.target.value)}
+          placeholder="Ej: 8.50"
+        />
+
+        {selectedRecipeData && currentPrice && (
           <div className="bg-gray-50 rounded-lg p-4">
             <h3 className="font-medium text-gray-900 mb-2">Datos Actuales</h3>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="text-gray-500">Costo Total:</span>
-                <span className="ml-2 font-medium">{formatCurrency(selectedRecipeData.currentCost)}</span>
+                <span className="ml-2 font-medium">{formatCurrency(selectedRecipeData.costo_total)}</span>
               </div>
               <div>
                 <span className="text-gray-500">Precio Venta:</span>
-                <span className="ml-2 font-medium">{formatCurrency(selectedRecipeData.currentPrice)}</span>
+                <span className="ml-2 font-medium">{formatCurrency(parseFloat(currentPrice))}</span>
               </div>
               <div>
                 <span className="text-gray-500">Margen:</span>
-                <span className="ml-2 font-medium text-green-600">{selectedRecipeData.currentMargin.toFixed(1)}%</span>
+                <span className="ml-2 font-medium text-green-600">{currentMargin.toFixed(1)}%</span>
               </div>
             </div>
           </div>
@@ -119,7 +144,7 @@ export function PriceSimulator() {
             placeholder="Ej: 10 para +10%, -5 para -5%"
           />
           <div className="flex items-end">
-            <Button onClick={calculateScenario} disabled={!selectedRecipe || !priceChange}>
+            <Button onClick={calculateScenario} disabled={!selectedRecipe || !priceChange || !currentPrice}>
               Simular
             </Button>
           </div>
@@ -130,9 +155,9 @@ export function PriceSimulator() {
             <h3 className="font-medium text-gray-900">Escenarios Simulados</h3>
             {scenarios.map((scenario) => {
               const recipe = selectedRecipeData!;
-              const newCost = recipe.currentCost * (1 + scenario.totalCostChange);
-              const costDiff = newCost - recipe.currentCost;
-              const marginDiff = scenario.newMargin - recipe.currentMargin;
+              const newCost = recipe.costo_total * (1 + scenario.totalCostChange);
+              const costDiff = newCost - recipe.costo_total;
+              const marginDiff = scenario.newMargin - currentMargin;
 
               return (
                 <div key={scenario.id} className="border border-gray-200 rounded-lg p-4">
@@ -162,13 +187,13 @@ export function PriceSimulator() {
                     </div>
                     <div>
                       <span className="text-gray-500">Precio Venta:</span>
-                      <div className="font-medium">{formatCurrency(recipe.currentPrice)}</div>
+                      <div className="font-medium">{formatCurrency(parseFloat(currentPrice))}</div>
                       <div className="text-xs text-gray-500">Sin cambios</div>
                     </div>
                     <div>
                       <span className="text-gray-500">Nuevo Margen:</span>
                       <div className={`font-medium ${
-                        scenario.newMargin >= recipe.currentMargin ? 'text-green-600' : 'text-red-600'
+                        scenario.newMargin >= currentMargin ? 'text-green-600' : 'text-red-600'
                       }`}>
                         {scenario.newMargin.toFixed(1)}%
                       </div>

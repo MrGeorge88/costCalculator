@@ -3,16 +3,17 @@
 import { useTranslations, useLocale } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { 
-  LayoutDashboard, 
-  Package, 
-  ChefHat, 
-  Presentation, 
-  Calculator, 
-  BarChart3, 
-  Settings 
+import {
+  LayoutDashboard,
+  Package,
+  ChefHat,
+  Presentation,
+  Calculator,
+  BarChart3,
+  Settings
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useSidebar } from '@/contexts/SidebarContext';
 
 const navigation = [
   { name: 'dashboard', href: '/', icon: LayoutDashboard },
@@ -28,10 +29,14 @@ export function Sidebar() {
   const t = useTranslations('navigation');
   const locale = useLocale();
   const pathname = usePathname();
+  const { isOpen } = useSidebar();
 
   return (
     <div
-      className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-white shadow-sm border-r border-gray-200 sidebar z-40"
+      className={cn(
+        "fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-white shadow-sm border-r border-gray-200 sidebar z-40 transition-transform duration-300",
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}
       style={{
         position: 'fixed',
         left: '0',
@@ -41,7 +46,9 @@ export function Sidebar() {
         backgroundColor: 'white',
         borderRight: '1px solid #e5e7eb',
         boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-        zIndex: '40'
+        zIndex: '40',
+        transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
+        transition: 'transform 0.3s ease-in-out'
       }}
     >
       <div className="p-6" style={{ padding: '1.5rem' }}>

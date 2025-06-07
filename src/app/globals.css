@@ -142,13 +142,14 @@
   padding: 1.5rem !important;
   z-index: 40 !important;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.3s ease-in-out !important;
 }
 
 .main-content {
-  margin-left: 16rem !important;
   padding: 1.5rem !important;
   min-height: calc(100vh - 4rem) !important;
   margin-top: 4rem !important;
+  transition: margin-left 0.3s ease-in-out !important;
 }
 
 .nav-link {
@@ -295,7 +296,6 @@ body {
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%) !important;
-    transition: transform 0.3s !important;
   }
 
   .main-content {

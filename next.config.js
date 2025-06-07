@@ -4,11 +4,13 @@ const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    _next_intl_trailing_slash: 'false'
+  },
   experimental: {
     serverComponentsExternalPackages: ['@supabase/supabase-js'],
   },
   images: {
-    domains: ['localhost'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -17,9 +19,6 @@ const nextConfig = {
         pathname: '/storage/v1/object/public/**',
       },
     ],
-  },
-  env: {
-    _next_intl_trailing_slash: 'false'
   },
   webpack: (config, { isServer }) => {
     // Ignore node-specific modules when bundling for the browser

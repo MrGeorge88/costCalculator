@@ -2,42 +2,58 @@
 
 import { useTranslations } from 'next-intl';
 import { Package, ChefHat, AlertTriangle, TrendingUp } from 'lucide-react';
+import { useRecipes } from '@/hooks/useRecipes';
+import { useIngredients } from '@/hooks/useIngredients';
 
 export function DashboardStats() {
   const t = useTranslations('dashboard');
+  const { recipes, loading: recipesLoading } = useRecipes();
+  const { ingredients, loading: ingredientsLoading } = useIngredients();
+
+  const totalRecipes = recipes.length;
+  const totalIngredients = ingredients.length;
+  const lowStockItems = ingredients.filter(ingredient =>
+    ingredient.stock_actual !== null &&
+    ingredient.stock_minimo !== null &&
+    ingredient.stock_actual <= ingredient.stock_minimo
+  ).length;
+
+  const averageMargin = recipes.length > 0
+    ? recipes.reduce((acc, recipe) => acc + (recipe.margen_ganancia || 0), 0) / recipes.length
+    : 0;
 
   const stats = [
     {
       name: t('totalRecipes'),
-      value: '12',
+      value: recipesLoading ? '...' : totalRecipes.toString(),
       icon: ChefHat,
       color: 'bg-blue-500',
-      change: '+2',
-      changeType: 'positive'
+      change: '',
+      changeType: 'neutral'
     },
     {
       name: t('totalIngredients'),
-      value: '48',
+      value: ingredientsLoading ? '...' : totalIngredients.toString(),
       icon: Package,
       color: 'bg-green-500',
-      change: '+5',
-      changeType: 'positive'
+      change: '',
+      changeType: 'neutral'
     },
     {
       name: t('lowStockItems'),
-      value: '3',
+      value: ingredientsLoading ? '...' : lowStockItems.toString(),
       icon: AlertTriangle,
-      color: 'bg-yellow-500',
-      change: '-1',
-      changeType: 'negative'
+      color: lowStockItems > 0 ? 'bg-red-500' : 'bg-yellow-500',
+      change: '',
+      changeType: lowStockItems > 0 ? 'negative' : 'neutral'
     },
     {
-      name: 'Ganancia Promedio',
-      value: '35%',
+      name: 'Margen Promedio',
+      value: recipesLoading ? '...' : `${averageMargin.toFixed(1)}%`,
       icon: TrendingUp,
       color: 'bg-purple-500',
-      change: '+2%',
-      changeType: 'positive'
+      change: '',
+      changeType: 'neutral'
     }
   ];
 
@@ -51,14 +67,17 @@ export function DashboardStats() {
               <div>
                 <p className="text-sm font-medium text-gray-600">{stat.name}</p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
-                <div className="flex items-center mt-2">
-                  <span className={`text-sm font-medium ${
-                    stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    {stat.change}
-                  </span>
-                  <span className="text-sm text-gray-500 ml-1">vs mes anterior</span>
-                </div>
+                {stat.change && (
+                  <div className="flex items-center mt-2">
+                    <span className={`text-sm font-medium ${
+                      stat.changeType === 'positive' ? 'text-green-600' :
+                      stat.changeType === 'negative' ? 'text-red-600' : 'text-gray-500'
+                    }`}>
+                      {stat.change}
+                    </span>
+                    <span className="text-sm text-gray-500 ml-1">vs mes anterior</span>
+                  </div>
+                )}
               </div>
               <div className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center`}>
                 <Icon className="w-6 h-6 text-white" />
