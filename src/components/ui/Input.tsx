@@ -2,7 +2,6 @@
 
 import { InputHTMLAttributes, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -32,10 +31,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             </div>
           )}
 
-          <motion.input
+          <input
             ref={ref}
             id={inputId}
-            whileFocus={{ scale: 1.01 }}
             className={cn(
               'block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 bg-white text-gray-900',
               error && 'border-red-300 focus:ring-red-500/20 focus:border-red-500',
@@ -54,14 +52,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {error && (
-          <motion.p
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-sm text-red-600 flex items-center"
-          >
+          <p className="text-sm text-red-600 flex items-center">
             <span className="mr-1">⚠</span>
             {error}
-          </motion.p>
+          </p>
         )}
 
         {helperText && !error && (
