@@ -63,23 +63,22 @@ export function Sidebar() {
         )}
       </AnimatePresence>
 
-      {/* Sidebar - GEMINI SOLUTION: Parte del grid, no fixed */}
-      <motion.div
+      {/* Sidebar - SOLUCIÓN CLAUDE: Flexbox responsive correcto */}
+      <motion.aside
         initial={false}
         animate={{
           width: isOpen ? 240 : 72
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className={cn(
-          // ESTRUCTURA GEMINI: Sidebar normal en el grid
-          "h-full flex flex-col",
-          // ANCHO FIJO - no se encoge
-          "flex-shrink-0",
-          // ESTILOS VISUALES
+          // Base: flex column, no shrink
+          "flex flex-col flex-shrink-0 h-full",
+          // Estilos visuales
           "bg-white shadow-lg border-r border-gray-200 overflow-hidden",
-          // RESPONSIVE: visible en desktop, overlay en mobile
+          // Desktop: siempre visible, solo cambia ancho
           "hidden lg:flex",
-          isOpen && "flex lg:flex"
+          // Mobile: fixed overlay cuando está abierto
+          isOpen && "fixed inset-y-0 left-0 z-50 flex lg:relative lg:z-auto"
         )}
         style={{
           width: isOpen ? '240px' : '72px'
@@ -187,7 +186,7 @@ export function Sidebar() {
             )}
           </AnimatePresence>
         </div>
-      </motion.div>
+      </motion.aside>
     </>
   );
 }

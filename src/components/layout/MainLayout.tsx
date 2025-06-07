@@ -13,26 +13,17 @@ interface MainLayoutProps {
 export function MainLayout({ children }: MainLayoutProps) {
   return (
     <SidebarProvider>
-      {/* ESTRUCTURA GEMINI: Contenedor principal con CSS Grid */}
-      <div className="main-container grid grid-cols-[auto_1fr] min-h-screen bg-slate-50">
-        {/* Sidebar como componente hermano - IZQUIERDA */}
-        <aside className="sidebar">
-          <Sidebar />
-        </aside>
+      {/* SOLUCIÓN CLAUDE: Flexbox simple y directo */}
+      <div className="flex min-h-screen bg-slate-50">
+        {/* Sidebar - IZQUIERDA */}
+        <Sidebar />
 
-        {/* Contenedor para el resto del contenido - DERECHA */}
-        <div className="content-wrapper flex flex-col">
-          {/* Header - Solo elementos de barra superior */}
-          <header className="top-header">
-            <Header />
-          </header>
-
-          {/* Contenido principal */}
-          <main className="page-content flex-1">
-            <MainContent>
-              {children}
-            </MainContent>
-          </main>
+        {/* Contenido principal - DERECHA */}
+        <div className="flex flex-col flex-1 min-w-0">
+          <Header />
+          <MainContent>
+            {children}
+          </MainContent>
         </div>
       </div>
     </SidebarProvider>
