@@ -166,7 +166,7 @@ export function useIngredients() {
   }, []);
 
   // Obtener ingrediente por ID
-  const getIngredient = useCallback(async (id: string) => {
+  const getIngredient = useCallback(async (id: string): Promise<Ingredient> => {
     try {
       const { data, error } = await supabase
         .from('ingredientes')
@@ -175,7 +175,9 @@ export function useIngredients() {
         .single();
 
       if (error) throw error;
-      return data;
+      if (!data) throw new Error('Ingrediente no encontrado');
+
+      return data as Ingredient;
     } catch (err) {
       console.error('Error getting ingredient:', err);
       setError('Error al obtener ingrediente');
