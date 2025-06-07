@@ -13,12 +13,20 @@ interface MainLayoutProps {
 export function MainLayout({ children }: MainLayoutProps) {
   return (
     <SidebarProvider>
-      <div className="min-h-screen bg-slate-50">
-        <Header />
+      <div className="flex h-screen bg-slate-50 overflow-hidden">
+        {/* Sidebar - Solo visible en desktop, en mobile es overlay */}
         <Sidebar />
-        <MainContent>
-          {children}
-        </MainContent>
+
+        {/* Main content area - Ocupa todo el ancho en mobile */}
+        <div className="flex flex-col flex-1 overflow-hidden w-full lg:w-auto">
+          {/* Header */}
+          <Header />
+
+          {/* Page content */}
+          <MainContent>
+            {children}
+          </MainContent>
+        </div>
       </div>
     </SidebarProvider>
   );
