@@ -3,7 +3,6 @@ import { getMessages } from 'next-intl/server';
 import { Inter } from 'next/font/google';
 import { Navbar } from '@/components/layout/Navbar';
 import { Sidebar } from '@/components/layout/Sidebar';
-import '../globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
