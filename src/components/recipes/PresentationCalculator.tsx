@@ -181,7 +181,7 @@ export function PresentationCalculator({
                 <Select
                   label="Unidad"
                   value={newPresentation.unidad_porcion}
-                  onChange={(value: string) => setNewPresentation(prev => ({ ...prev, unidad_porcion: value }))}
+                  onChange={(e) => setNewPresentation(prev => ({ ...prev, unidad_porcion: e.target.value }))}
                   options={PORTION_UNITS}
                 />
               </div>

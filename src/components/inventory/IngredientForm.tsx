@@ -42,7 +42,7 @@ export function IngredientForm({ ingredientId, onSave, onCancel }: IngredientFor
       setIsEditing(true);
       loadIngredientData();
     }
-  }, [ingredientId]);
+  }, [ingredientId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadIngredientData = async () => {
     if (!ingredientId) return;
