@@ -255,7 +255,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
         // Actualizar receta existente
         const { error: updateError } = await supabase
           .from('recetas')
-          .update(recipePayload)
+          .update(recipePayload as any)
           .eq('id', recipeData.id);
 
         if (updateError) throw updateError;
@@ -264,7 +264,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
         // Crear nueva receta
         const { data: newRecipe, error: insertError } = await supabase
           .from('recetas')
-          .insert(recipePayload)
+          .insert(recipePayload as any)
           .select()
           .single();
 
@@ -293,7 +293,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
       if (ingredientPayloads.length > 0) {
         const { error: ingredientsError } = await supabase
           .from('receta_ingredientes')
-          .insert(ingredientPayloads);
+          .insert(ingredientPayloads as any);
 
         if (ingredientsError) throw ingredientsError;
       }

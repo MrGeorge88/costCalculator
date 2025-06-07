@@ -137,7 +137,7 @@ export function useRecipes() {
 
       const { data, error } = await supabase
         .from('recetas')
-        .update({ activa })
+        .update({ activa } as any)
         .eq('id', id)
         .select()
         .single();
@@ -189,7 +189,7 @@ export function useRecipes() {
 
       const { data: newRecipe, error: recipeError } = await supabase
         .from('recetas')
-        .insert(newRecipeData)
+        .insert(newRecipeData as any)
         .select()
         .single();
 
@@ -208,7 +208,7 @@ export function useRecipes() {
 
         const { error: ingredientsError } = await supabase
           .from('receta_ingredientes')
-          .insert(ingredientData);
+          .insert(ingredientData as any);
 
         if (ingredientsError) throw ingredientsError;
       }

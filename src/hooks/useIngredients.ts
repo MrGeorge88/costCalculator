@@ -59,7 +59,7 @@ export function useIngredients() {
         throw new Error('Usuario no autenticado');
       }
 
-      const ingredientData: IngredientInsert = {
+      const ingredientData = {
         nombre: formData.nombre.trim(),
         descripcion: formData.descripcion.trim() || null,
         unidad_medida: formData.unidad_medida,
@@ -74,7 +74,7 @@ export function useIngredients() {
 
       const { data, error } = await supabase
         .from('ingredientes')
-        .insert([ingredientData])
+        .insert([ingredientData as any])
         .select()
         .single();
 
@@ -98,7 +98,7 @@ export function useIngredients() {
       setLoading(true);
       setError(null);
 
-      const ingredientData: IngredientUpdate = {
+      const ingredientData = {
         nombre: formData.nombre.trim(),
         descripcion: formData.descripcion.trim() || null,
         unidad_medida: formData.unidad_medida,
@@ -112,7 +112,7 @@ export function useIngredients() {
 
       const { data, error } = await supabase
         .from('ingredientes')
-        .update(ingredientData)
+        .update(ingredientData as any)
         .eq('id', id)
         .select()
         .single();
