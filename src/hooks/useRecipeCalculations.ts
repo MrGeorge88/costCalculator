@@ -30,13 +30,13 @@ export interface RecipeIngredient {
 export interface RecipeData {
   id?: string;
   nombre: string;
-  descripcion?: string;
+  descripcion?: string | null;
   categoria: string;
-  tiempo_preparacion?: number;
+  tiempo_preparacion?: number | null;
   rendimiento: number;
   unidad_rendimiento: string;
-  precio_sugerido?: number;
-  margen_ganancia?: number;
+  precio_sugerido?: number | null;
+  margen_ganancia?: number | null;
   ingredientes: RecipeIngredient[];
 }
 
@@ -83,11 +83,6 @@ export function useRecipeCalculations(initialData?: RecipeData) {
   useEffect(() => {
     loadAvailableIngredients();
   }, [loadAvailableIngredients]);
-
-  // Recalcular costos cuando cambian los ingredientes o el rendimiento
-  useEffect(() => {
-    calculateRecipeCosts();
-  }, [recipeData.ingredientes, recipeData.rendimiento, calculateRecipeCosts]);
 
   // Función para calcular todos los costos de la receta
   const calculateRecipeCosts = useCallback(() => {
@@ -150,6 +145,11 @@ export function useRecipeCalculations(initialData?: RecipeData) {
 
     setCalculations(newCalculations);
   }, [recipeData, availableIngredients]);
+
+  // Recalcular costos cuando cambian los ingredientes o el rendimiento
+  useEffect(() => {
+    calculateRecipeCosts();
+  }, [recipeData.ingredientes, recipeData.rendimiento, calculateRecipeCosts]);
 
   // Agregar ingrediente a la receta
   const addIngredient = useCallback((ingrediente_id: string, cantidad: number = 1, unidad: string = 'kg') => {
@@ -229,6 +229,12 @@ export function useRecipeCalculations(initialData?: RecipeData) {
     setError(null);
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        throw new Error('Usuario no autenticado');
+      }
+
       // Guardar receta principal
       const recipePayload = {
         nombre: recipeData.nombre,
@@ -240,6 +246,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
         costo_total: calculations.costo_total,
         precio_sugerido: recipeData.precio_sugerido,
         margen_ganancia: recipeData.margen_ganancia,
+        user_id: user.id,
       };
 
       let recipeId: string;
