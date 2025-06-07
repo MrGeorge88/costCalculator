@@ -3,6 +3,7 @@ import { DashboardStats } from '@/components/dashboard/DashboardStats';
 import { RecentActivity } from '@/components/dashboard/RecentActivity';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { TailwindTest } from '@/components/test/TailwindTest';
+import { CalculationTest } from '@/components/test/CalculationTest';
 
 export default function HomePage() {
   const t = useTranslations('dashboard');
@@ -17,6 +18,8 @@ export default function HomePage() {
       </div>
 
       <DashboardStats />
+
+      <CalculationTest />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <QuickActions />
