@@ -2,22 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
+import { Database } from '@/types/database';
 
-export interface Ingredient {
-  id: string;
-  nombre: string;
-  descripcion?: string | null;
-  unidad_medida: string;
-  precio_por_unidad: number;
-  stock_actual: number;
-  stock_minimo: number;
-  proveedor?: string | null;
-  categoria: string;
-  fecha_vencimiento?: string | null;
-  created_at: string;
-  updated_at: string;
-  user_id: string;
-}
+// Usar el tipo de la base de datos directamente
+export type Ingredient = Database['public']['Tables']['ingredientes']['Row'];
 
 export interface IngredientFormData {
   nombre: string;
@@ -48,7 +36,7 @@ export function useIngredients() {
         .order('nombre');
 
       if (error) throw error;
-      setIngredients(data || []);
+      setIngredients((data || []) as Ingredient[]);
     } catch (err) {
       console.error('Error loading ingredients:', err);
       setError('Error al cargar ingredientes');
@@ -91,7 +79,7 @@ export function useIngredients() {
       if (error) throw error;
 
       // Actualizar la lista local
-      setIngredients(prev => [...prev, data]);
+      setIngredients(prev => [...prev, data as Ingredient]);
       return data;
     } catch (err) {
       console.error('Error creating ingredient:', err);
@@ -130,7 +118,7 @@ export function useIngredients() {
       if (error) throw error;
 
       // Actualizar la lista local
-      setIngredients(prev => prev.map(ing => ing.id === id ? data : ing));
+      setIngredients(prev => prev.map(ing => ing.id === id ? data as Ingredient : ing));
       return data;
     } catch (err) {
       console.error('Error updating ingredient:', err);
