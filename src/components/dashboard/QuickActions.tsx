@@ -1,11 +1,12 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { Package, ChefHat, Calculator } from 'lucide-react';
 
 export function QuickActions() {
   const t = useTranslations('dashboard');
+  const locale = useLocale();
 
   const actions = [
     {
@@ -37,7 +38,7 @@ export function QuickActions() {
           return (
             <Link
               key={action.name}
-              href={action.href}
+              href={`/${locale}${action.href}`}
               className={`flex items-center space-x-3 p-3 rounded-lg text-white transition-colors ${action.color}`}
             >
               <Icon className="w-5 h-5" />

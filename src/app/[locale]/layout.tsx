@@ -10,9 +10,9 @@ const inter = Inter({ subsets: ['latin'] });
 export async function generateMetadata({
   params
 }: {
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }) {
-  const { locale } = await params;
+  const { locale } = params;
 
   return {
     title: locale === 'es' ? 'Calculadora de Costos de Helados' : 'Ice Cream Cost Calculator',
@@ -30,10 +30,9 @@ export default async function LocaleLayout({
   params
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }) {
-  // Await the params since they're now a Promise in Next.js 15
-  const { locale } = await params;
+  const { locale } = params;
 
   // Providing all messages to the client
   // side is the easiest way to get started
@@ -45,7 +44,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <div className="min-h-screen bg-gray-50">
             <Navbar />
-            <div className="flex">
+            <div className="flex pt-16">
               <Sidebar />
               <main className="flex-1 p-6 ml-64">
                 {children}

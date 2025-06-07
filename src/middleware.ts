@@ -6,10 +6,24 @@ export default createMiddleware({
   locales,
 
   // Used when no locale matches
-  defaultLocale: 'es'
+  defaultLocale: 'es',
+
+  // Always redirect to locale prefix
+  localePrefix: 'always'
 });
 
 export const config = {
   // Match only internationalized pathnames
-  matcher: ['/', '/((?!api|_next|_vercel|.*\\..*).*)']
+  matcher: [
+    // Enable a redirect to a matching locale at the root
+    '/',
+
+    // Set a cookie to remember the previous locale for
+    // all requests that have a locale prefix
+    '/(es|en)/:path*',
+
+    // Enable redirects that add missing locales
+    // (e.g. `/pathnames` -> `/en/pathnames`)
+    '/((?!_next|_vercel|.*\\..*).*)'
+  ]
 };

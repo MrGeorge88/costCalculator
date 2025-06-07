@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { 
@@ -26,6 +26,7 @@ const navigation = [
 
 export function Sidebar() {
   const t = useTranslations('navigation');
+  const locale = useLocale();
   const pathname = usePathname();
 
   return (
@@ -34,12 +35,13 @@ export function Sidebar() {
         <nav className="space-y-2">
           {navigation.map((item) => {
             const Icon = item.icon;
-            const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-            
+            const localizedHref = `/${locale}${item.href}`;
+            const isActive = pathname === localizedHref || pathname.startsWith(localizedHref + '/');
+
             return (
               <Link
                 key={item.name}
-                href={item.href}
+                href={localizedHref}
                 className={cn(
                   'flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                   isActive
