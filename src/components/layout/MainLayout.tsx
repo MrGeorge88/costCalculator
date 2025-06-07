@@ -13,12 +13,12 @@ interface MainLayoutProps {
 export function MainLayout({ children }: MainLayoutProps) {
   return (
     <SidebarProvider>
-      <div className="flex h-screen bg-slate-50 overflow-hidden">
-        {/* Sidebar - Solo visible en desktop, en mobile es overlay */}
+      <div className="flex h-screen bg-slate-50">
+        {/* Sidebar - DEBE estar primero para aparecer a la izquierda */}
         <Sidebar />
 
-        {/* Main content area - Ocupa todo el ancho en mobile */}
-        <div className="flex flex-col flex-1 overflow-hidden w-full lg:w-auto">
+        {/* Main content area - Columna derecha */}
+        <div className="flex flex-col flex-1 min-w-0">
           {/* Header */}
           <Header />
 

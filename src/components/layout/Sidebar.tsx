@@ -67,20 +67,16 @@ export function Sidebar() {
       <motion.aside
         initial={false}
         animate={{
-          width: isOpen ? 240 : 72,
-          x: 0
+          width: isOpen ? 240 : 72
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className={cn(
-          "h-full bg-white shadow-lg border-r border-gray-200 z-40 overflow-hidden flex flex-col flex-shrink-0",
-          // En desktop: siempre visible, solo cambia el ancho
+          "h-full bg-white shadow-lg border-r border-gray-200 overflow-hidden flex flex-col flex-shrink-0",
+          // Desktop: siempre visible en el lado izquierdo
           "hidden lg:flex",
-          // En mobile: overlay cuando está abierto
-          isOpen && "fixed inset-y-0 left-0 flex lg:relative"
+          // Mobile: overlay cuando está abierto
+          isOpen && "fixed inset-y-0 left-0 z-50 flex lg:relative lg:z-auto"
         )}
-        style={{
-          width: isOpen ? '240px' : '72px',
-        }}
       >
         {/* Search Section - Only when expanded */}
         <AnimatePresence>
