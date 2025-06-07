@@ -31,7 +31,7 @@ export function Sidebar() {
 
   return (
     <div
-      className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-white shadow-sm border-r border-gray-200 sidebar"
+      className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-white shadow-sm border-r border-gray-200 sidebar z-40"
       style={{
         position: 'fixed',
         left: '0',
@@ -40,7 +40,8 @@ export function Sidebar() {
         width: '16rem',
         backgroundColor: 'white',
         borderRight: '1px solid #e5e7eb',
-        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+        zIndex: '40'
       }}
     >
       <div className="p-6" style={{ padding: '1.5rem' }}>

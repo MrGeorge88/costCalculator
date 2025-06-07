@@ -39,16 +39,23 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <body className={`${inter.className} min-h-screen bg-gray-50`} style={{ minHeight: '100vh', backgroundColor: '#f8fafc' }}>
+      <body className={`${inter.className} min-h-screen bg-gray-50`} style={{ minHeight: '100vh', backgroundColor: '#f8fafc', margin: '0', padding: '0' }}>
         <NextIntlClientProvider messages={messages}>
-          <div className="min-h-screen bg-gray-50" style={{ minHeight: '100vh', backgroundColor: '#f8fafc' }}>
+          <div className="min-h-screen bg-gray-50" style={{ minHeight: '100vh', backgroundColor: '#f8fafc', position: 'relative' }}>
             <Navbar />
-            <div className="flex pt-16" style={{ display: 'flex', paddingTop: '4rem' }}>
-              <Sidebar />
-              <main className="flex-1 p-6 ml-64 main-content" style={{ flex: '1', padding: '1.5rem', marginLeft: '16rem' }}>
-                {children}
-              </main>
-            </div>
+            <Sidebar />
+            <main
+              className="flex-1 p-6 ml-64 main-content"
+              style={{
+                marginLeft: '16rem',
+                marginTop: '4rem',
+                padding: '1.5rem',
+                minHeight: 'calc(100vh - 4rem)',
+                backgroundColor: '#f8fafc'
+              }}
+            >
+              {children}
+            </main>
           </div>
         </NextIntlClientProvider>
       </body>
