@@ -63,13 +63,11 @@ export function Sidebar() {
       <motion.aside
         initial={false}
         animate={{
-          x: isOpen ? 0 : -240,
           width: isOpen ? 240 : 72
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className={cn(
-          "fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white shadow-lg border-r border-gray-200 z-40 overflow-hidden",
-          "lg:translate-x-0"
+          "fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white shadow-lg border-r border-gray-200 z-40 overflow-hidden"
         )}
         style={{ width: isOpen ? '240px' : '72px' }}
       >

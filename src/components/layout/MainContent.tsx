@@ -18,11 +18,8 @@ export function MainContent({ children }: MainContentProps) {
         marginLeft: isOpen ? '240px' : '72px'
       }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className={cn(
-        "flex-1 pt-16 min-h-screen bg-slate-50",
-        "lg:ml-60", // Default margin for large screens
-        isOpen ? "ml-60" : "ml-18" // Responsive margins
-      )}
+      className="flex-1 pt-16 min-h-screen bg-slate-50"
+      style={{ marginLeft: isOpen ? '240px' : '72px' }}
     >
       <div className="container mx-auto px-6 py-8 max-w-7xl">
         <motion.div

@@ -34,13 +34,13 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, toggle, close]);
 
-  // Close sidebar on mobile by default
+  // Set sidebar state based on screen size
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1024) {
-        setIsOpen(false);
+        setIsOpen(false); // Collapsed on mobile
       } else {
-        setIsOpen(true);
+        setIsOpen(true); // Expanded on desktop
       }
     };
 
