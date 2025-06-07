@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 interface SidebarContextType {
   isOpen: boolean;
@@ -17,6 +17,37 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
   const toggle = () => setIsOpen(!isOpen);
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 'b') {
+        e.preventDefault();
+        toggle();
+      }
+      if (e.key === 'Escape' && isOpen) {
+        close();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
+  // Close sidebar on mobile by default
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setIsOpen(false);
+      } else {
+        setIsOpen(true);
+      }
+    };
+
+    handleResize(); // Check initial size
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <SidebarContext.Provider value={{ isOpen, toggle, open, close }}>

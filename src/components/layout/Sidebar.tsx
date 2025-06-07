@@ -4,22 +4,22 @@ import { useTranslations, useLocale } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
-  LayoutDashboard,
   Package,
   ChefHat,
-  Presentation,
+  Box,
   Calculator,
   BarChart3,
   Settings
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSidebar } from '@/contexts/SidebarContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
 
 const navigation = [
-  { name: 'dashboard', href: '/', icon: LayoutDashboard },
   { name: 'inventory', href: '/inventory', icon: Package },
   { name: 'recipes', href: '/recipes', icon: ChefHat },
-  { name: 'presentations', href: '/presentations', icon: Presentation },
+  { name: 'presentations', href: '/presentations', icon: Box },
   { name: 'simulator', href: '/simulator', icon: Calculator },
   { name: 'reports', href: '/reports', icon: BarChart3 },
   { name: 'settings', href: '/settings', icon: Settings },
@@ -29,67 +29,104 @@ export function Sidebar() {
   const t = useTranslations('navigation');
   const locale = useLocale();
   const pathname = usePathname();
-  const { isOpen } = useSidebar();
+  const { isOpen, close } = useSidebar();
+
+  // Close sidebar on mobile when clicking outside
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 'b') {
+        e.preventDefault();
+        close();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [close]);
 
   return (
-    <div
-      className={cn(
-        "fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-white shadow-sm border-r border-gray-200 sidebar z-40 transition-transform duration-300",
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      )}
-      style={{
-        position: 'fixed',
-        left: '0',
-        top: '4rem',
-        height: 'calc(100vh - 4rem)',
-        width: '16rem',
-        backgroundColor: 'white',
-        borderRight: '1px solid #e5e7eb',
-        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-        zIndex: '40',
-        transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
-        transition: 'transform 0.3s ease-in-out'
-      }}
-    >
-      <div className="p-6" style={{ padding: '1.5rem' }}>
-        <nav className="space-y-2" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {navigation.map((item) => {
-            const Icon = item.icon;
-            const localizedHref = `/${locale}${item.href}`;
-            const isActive = pathname === localizedHref || pathname.startsWith(localizedHref + '/');
+    <>
+      {/* Mobile Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden"
+            onClick={close}
+          />
+        )}
+      </AnimatePresence>
 
-            return (
-              <Link
-                key={item.name}
-                href={localizedHref}
-                className={cn(
-                  'flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors nav-link',
-                  isActive
-                    ? 'bg-blue-50 text-blue-700 border border-blue-200 active'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                )}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.5rem 0.75rem',
-                  borderRadius: '0.5rem',
-                  fontSize: '0.875rem',
-                  fontWeight: '500',
-                  textDecoration: 'none',
-                  transition: 'all 0.2s',
-                  backgroundColor: isActive ? '#eff6ff' : 'transparent',
-                  color: isActive ? '#2563eb' : '#6b7280',
-                  border: isActive ? '1px solid #bfdbfe' : '1px solid transparent'
-                }}
-              >
-                <Icon style={{ width: '1.25rem', height: '1.25rem' }} />
-                <span>{t(item.name)}</span>
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
-    </div>
+      {/* Sidebar */}
+      <motion.aside
+        initial={false}
+        animate={{
+          x: isOpen ? 0 : -240,
+          width: isOpen ? 240 : 72
+        }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        className={cn(
+          "fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white shadow-lg border-r border-gray-200 z-40 overflow-hidden",
+          "lg:translate-x-0"
+        )}
+        style={{ width: isOpen ? '240px' : '72px' }}
+      >
+        <div className="p-4">
+          <nav className="space-y-2">
+            {navigation.map((item, index) => {
+              const Icon = item.icon;
+              const localizedHref = `/${locale}${item.href}`;
+              const isActive = pathname === localizedHref || pathname.startsWith(localizedHref + '/');
+
+              return (
+                <motion.div
+                  key={item.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Link
+                    href={localizedHref}
+                    className={cn(
+                      'flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 group relative',
+                      isActive
+                        ? 'bg-primary/10 text-primary border border-primary/20'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                    )}
+                    title={!isOpen ? t(item.name) : undefined}
+                  >
+                    <Icon className="w-5 h-5 flex-shrink-0" />
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.span
+                          initial={{ opacity: 0, width: 0 }}
+                          animate={{ opacity: 1, width: 'auto' }}
+                          exit={{ opacity: 0, width: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="ml-3 whitespace-nowrap overflow-hidden"
+                        >
+                          {t(item.name)}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Active indicator */}
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeTab"
+                        className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r-full"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </nav>
+        </div>
+      </motion.aside>
+    </>
   );
 }

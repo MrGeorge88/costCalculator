@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import { useSidebar } from '@/contexts/SidebarContext';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 interface MainContentProps {
   children: ReactNode;
@@ -12,21 +13,26 @@ export function MainContent({ children }: MainContentProps) {
   const { isOpen } = useSidebar();
 
   return (
-    <main
-      className={cn(
-        "flex-1 p-6 main-content transition-all duration-300",
-        isOpen ? "ml-64" : "ml-0"
-      )}
-      style={{
-        marginLeft: isOpen ? '16rem' : '0',
-        marginTop: '4rem',
-        padding: '1.5rem',
-        minHeight: 'calc(100vh - 4rem)',
-        backgroundColor: '#f8fafc',
-        transition: 'margin-left 0.3s ease-in-out'
+    <motion.main
+      animate={{
+        marginLeft: isOpen ? '240px' : '72px'
       }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
+      className={cn(
+        "flex-1 pt-16 min-h-screen bg-slate-50",
+        "lg:ml-60", // Default margin for large screens
+        isOpen ? "ml-60" : "ml-18" // Responsive margins
+      )}
     >
-      {children}
-    </main>
+      <div className="container mx-auto px-6 py-8 max-w-7xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          {children}
+        </motion.div>
+      </div>
+    </motion.main>
   );
 }

@@ -7,19 +7,22 @@ export default function HomePage() {
   const t = useTranslations('dashboard');
 
   return (
-    <div className="space-y-6" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <h1 className="text-3xl font-bold text-gray-900" style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#1f2937', marginBottom: '0.5rem' }}>
+    <div className="space-y-8">
+      {/* Header Section */}
+      <div className="text-center lg:text-left">
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">
           {t('title')}
         </h1>
-        <p className="text-gray-600 mt-2" style={{ color: '#6b7280', marginTop: '0.5rem' }}>
+        <p className="text-xl text-gray-600">
           {t('welcome')}
         </p>
       </div>
 
+      {/* KPI Cards */}
       <DashboardStats />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <QuickActions />
         <RecentActivity />
       </div>

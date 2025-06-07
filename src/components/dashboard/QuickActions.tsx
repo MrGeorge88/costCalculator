@@ -2,7 +2,10 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
-import { Package, ChefHat, Calculator } from 'lucide-react';
+import { Package, ChefHat, Calculator, Plus } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { motion } from 'framer-motion';
 
 export function QuickActions() {
   const t = useTranslations('dashboard');
@@ -11,42 +14,66 @@ export function QuickActions() {
   const actions = [
     {
       name: 'Agregar Ingrediente',
+      description: 'Añadir nuevos ingredientes al inventario',
       href: '/inventory/new',
       icon: Package,
-      color: 'bg-blue-500 hover:bg-blue-600'
+      color: 'primary' as const
     },
     {
       name: 'Nueva Receta',
+      description: 'Crear una nueva receta de helado',
       href: '/recipes/new',
       icon: ChefHat,
-      color: 'bg-green-500 hover:bg-green-600'
+      color: 'secondary' as const
     },
     {
       name: 'Simular Costos',
+      description: 'Analizar escenarios de precios',
       href: '/simulator',
       icon: Calculator,
-      color: 'bg-purple-500 hover:bg-purple-600'
+      color: 'warning' as const
     }
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('quickActions')}</h3>
-      <div className="space-y-3">
-        {actions.map((action) => {
-          const Icon = action.icon;
-          return (
-            <Link
-              key={action.name}
-              href={`/${locale}${action.href}`}
-              className={`flex items-center space-x-3 p-3 rounded-lg text-white transition-colors ${action.color}`}
-            >
-              <Icon className="w-5 h-5" />
-              <span className="font-medium">{action.name}</span>
-            </Link>
-          );
-        })}
-      </div>
-    </div>
+    <Card hover>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Plus className="w-5 h-5 text-primary" />
+          {t('quickActions')}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
+          {actions.map((action, index) => {
+            const Icon = action.icon;
+            return (
+              <motion.div
+                key={action.name}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.3 }}
+              >
+                <Link href={`/${locale}${action.href}`}>
+                  <Button
+                    variant={action.color}
+                    size="lg"
+                    className="w-full justify-start h-auto p-4"
+                    icon={<Icon className="w-5 h-5" />}
+                  >
+                    <div className="text-left">
+                      <div className="font-semibold">{action.name}</div>
+                      <div className="text-sm opacity-90 font-normal">
+                        {action.description}
+                      </div>
+                    </div>
+                  </Button>
+                </Link>
+              </motion.div>
+            );
+          })}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
