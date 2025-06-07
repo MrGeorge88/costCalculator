@@ -1,14 +1,11 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { LanguageSelector } from './LanguageSelector';
 import { UserMenu } from './UserMenu';
-import { Bell, Search, Menu, X } from 'lucide-react';
+import { Bell, Menu, X } from 'lucide-react';
 import { useSidebar } from '@/contexts/SidebarContext';
 import { motion } from 'framer-motion';
 
 export function Header() {
-  const t = useTranslations('common');
   const { isOpen, toggle } = useSidebar();
 
   return (
@@ -34,7 +31,7 @@ export function Header() {
                 {isOpen ? <X size={20} /> : <Menu size={20} />}
               </motion.div>
             </button>
-            
+
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gradient-to-br from-primary to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-sm">🍦</span>
@@ -46,31 +43,14 @@ export function Header() {
             </div>
           </div>
 
-          {/* Center - Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8 hidden md:block">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                placeholder={t('search') || 'Buscar recetas, ingredientes...'}
-                className="block w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50/50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all duration-200"
-              />
-            </div>
-          </div>
-
-          {/* Right side - Actions */}
+          {/* Right side - Minimal Actions */}
           <div className="flex items-center space-x-3">
             {/* Notifications */}
             <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all duration-200">
               <Bell size={20} />
               <span className="absolute -top-1 -right-1 block h-3 w-3 rounded-full bg-red-400 ring-2 ring-white"></span>
             </button>
-            
-            {/* Language Selector */}
-            <LanguageSelector />
-            
+
             {/* User Menu */}
             <UserMenu />
           </div>

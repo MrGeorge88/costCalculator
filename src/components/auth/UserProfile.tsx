@@ -258,7 +258,7 @@ export function UserProfile({ onUpdate }: UserProfileProps) {
                 Cambiar Contraseña
               </Button>
               <Button
-                variant="destructive"
+                variant="danger"
                 onClick={handleSignOut}
                 className="w-full justify-start"
               >

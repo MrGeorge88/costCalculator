@@ -9,14 +9,18 @@ import {
   Box,
   Calculator,
   BarChart3,
-  Settings
+  Settings,
+  Search,
+  Home
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSidebar } from '@/contexts/SidebarContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
+import { LanguageSelector } from './LanguageSelector';
 
 const navigation = [
+  { name: 'dashboard', href: '/', icon: Home },
   { name: 'inventory', href: '/inventory', icon: Package },
   { name: 'recipes', href: '/recipes', icon: ChefHat },
   { name: 'presentations', href: '/presentations', icon: Box },
@@ -67,11 +71,36 @@ export function Sidebar() {
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className={cn(
-          "fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white shadow-lg border-r border-gray-200 z-40 overflow-hidden"
+          "fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white shadow-lg border-r border-gray-200 z-40 overflow-hidden flex flex-col"
         )}
         style={{ width: isOpen ? '240px' : '72px' }}
       >
-        <div className="p-4">
+        {/* Search Section - Only when expanded */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="p-4 border-b border-gray-100"
+            >
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search className="h-4 w-4 text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Buscar..."
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg text-sm leading-5 bg-gray-50/50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all duration-200"
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Navigation Section */}
+        <div className="flex-1 p-4">
           <nav className="space-y-2">
             {navigation.map((item, index) => {
               const Icon = item.icon;
@@ -123,6 +152,30 @@ export function Sidebar() {
               );
             })}
           </nav>
+        </div>
+
+        {/* Language Selector Section - Bottom */}
+        <div className="p-4 border-t border-gray-100">
+          <AnimatePresence>
+            {isOpen ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-3"
+              >
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Idioma
+                </div>
+                <LanguageSelector />
+              </motion.div>
+            ) : (
+              <div className="flex justify-center">
+                <LanguageSelector />
+              </div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.aside>
     </>

@@ -210,10 +210,12 @@ touch tests/recipe-creation.spec.ts
 
 ### **Funcional**
 - [✅] **COMPLETADO**: Sistema de autenticación UI implementado
+- [✅] **COMPLETADO**: Navegación reorganizada al sidebar izquierdo
 - [✅] Usuario puede registrarse exitosamente
 - [✅] Login funciona con redirección correcta
 - [✅] Password reset flow completo
 - [✅] Rutas protegidas funcionan
+- [✅] Selector de idioma movido al sidebar
 - [ ] Tests pasan al 100%
 - [ ] Lighthouse score ≥90
 
