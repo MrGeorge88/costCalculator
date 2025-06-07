@@ -171,121 +171,150 @@ export function IngredientForm({ ingredientId, onSave, onCancel }: IngredientFor
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Input
-          label={t('name')}
-          name="nombre"
-          value={formData.nombre}
-          onChange={handleInputChange}
-          error={errors.nombre}
-          placeholder="Ej: Leche Entera"
-          required
-        />
+    <div className="max-w-4xl mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Información Básica */}
+        <div className="form-section">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">📝 Información Básica</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Input
+              label={t('name')}
+              name="nombre"
+              value={formData.nombre}
+              onChange={handleInputChange}
+              error={errors.nombre}
+              placeholder="Ej: Leche Entera"
+              required
+            />
 
-        <Select
-          label={t('category')}
-          name="categoria"
-          value={formData.categoria}
-          onChange={handleInputChange}
-          options={categoryOptions}
-          error={errors.categoria}
-          placeholder="Seleccionar categoría"
-          required
-        />
+            <Select
+              label={t('category')}
+              name="categoria"
+              value={formData.categoria}
+              onChange={handleInputChange}
+              options={categoryOptions}
+              error={errors.categoria}
+              placeholder="Seleccionar categoría"
+              required
+            />
 
-        <div className="md:col-span-2">
-          <Input
-            label={t('description')}
-            name="descripcion"
-            value={formData.descripcion}
-            onChange={handleInputChange}
-            placeholder="Descripción opcional del ingrediente"
-          />
+            <div className="md:col-span-2">
+              <Input
+                label={t('description')}
+                name="descripcion"
+                value={formData.descripcion}
+                onChange={handleInputChange}
+                placeholder="Descripción opcional del ingrediente"
+              />
+            </div>
+          </div>
         </div>
 
-        <Select
-          label={t('measurementUnit')}
-          name="unidad_medida"
-          value={formData.unidad_medida}
-          onChange={handleInputChange}
-          options={unitOptions}
-          error={errors.unidad_medida}
-          placeholder="Seleccionar unidad"
-          required
-        />
+        {/* Unidad y Precio */}
+        <div className="form-section">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">💰 Unidad de Medida y Precio</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Select
+              label={t('measurementUnit')}
+              name="unidad_medida"
+              value={formData.unidad_medida}
+              onChange={handleInputChange}
+              options={unitOptions}
+              error={errors.unidad_medida}
+              placeholder="Seleccionar unidad"
+              required
+            />
 
-        <Input
-          label={t('unitPrice')}
-          name="precio_por_unidad"
-          type="number"
-          step="0.01"
-          min="0"
-          value={formData.precio_por_unidad}
-          onChange={handleInputChange}
-          error={errors.precio_por_unidad}
-          placeholder="0.00"
-          required
-        />
+            <Input
+              label={t('unitPrice')}
+              name="precio_por_unidad"
+              type="number"
+              step="0.01"
+              min="0"
+              value={formData.precio_por_unidad}
+              onChange={handleInputChange}
+              error={errors.precio_por_unidad}
+              placeholder="0.00"
+              required
+            />
+          </div>
+        </div>
 
-        <Input
-          label={t('currentStock')}
-          name="stock_actual"
-          type="number"
-          step="0.01"
-          min="0"
-          value={formData.stock_actual}
-          onChange={handleInputChange}
-          error={errors.stock_actual}
-          placeholder="0"
-          required
-        />
+        {/* Inventario */}
+        <div className="form-section">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">📦 Control de Inventario</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Input
+              label={t('currentStock')}
+              name="stock_actual"
+              type="number"
+              step="0.01"
+              min="0"
+              value={formData.stock_actual}
+              onChange={handleInputChange}
+              error={errors.stock_actual}
+              placeholder="0"
+              required
+            />
 
-        <Input
-          label={t('minimumStock')}
-          name="stock_minimo"
-          type="number"
-          step="0.01"
-          min="0"
-          value={formData.stock_minimo}
-          onChange={handleInputChange}
-          error={errors.stock_minimo}
-          placeholder="0"
-          required
-        />
+            <Input
+              label={t('minimumStock')}
+              name="stock_minimo"
+              type="number"
+              step="0.01"
+              min="0"
+              value={formData.stock_minimo}
+              onChange={handleInputChange}
+              error={errors.stock_minimo}
+              placeholder="0"
+              required
+            />
+          </div>
+        </div>
 
-        <Input
-          label={t('supplier')}
-          name="proveedor"
-          value={formData.proveedor}
-          onChange={handleInputChange}
-          placeholder="Nombre del proveedor"
-        />
+        {/* Información Adicional */}
+        <div className="form-section">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">ℹ️ Información Adicional</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Input
+              label={t('supplier')}
+              name="proveedor"
+              value={formData.proveedor}
+              onChange={handleInputChange}
+              placeholder="Nombre del proveedor"
+            />
 
-        <Input
-          label={t('expirationDate')}
-          name="fecha_vencimiento"
-          type="date"
-          value={formData.fecha_vencimiento}
-          onChange={handleInputChange}
-        />
-      </div>
+            <Input
+              label={t('expirationDate')}
+              name="fecha_vencimiento"
+              type="date"
+              value={formData.fecha_vencimiento}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
 
-      <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCancel || (() => router.back())}
-        >
-          Cancelar
-        </Button>
-        <Button
-          type="submit"
-          loading={loading}
-        >
-          {isEditing ? 'Actualizar' : t('save')}
-        </Button>
-      </div>
-    </form>
+        {/* Botones de Acción */}
+        <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-8 border-t-2 border-gray-200">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onCancel || (() => router.back())}
+            className="px-8 py-3 text-base font-medium"
+            size="lg"
+          >
+            ❌ Cancelar
+          </Button>
+          <Button
+            type="submit"
+            loading={loading}
+            className="px-8 py-3 text-base font-medium bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+            size="lg"
+          >
+            {isEditing ? '✅ Actualizar Ingrediente' : '💾 Guardar Ingrediente'}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
