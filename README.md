@@ -1,11 +1,37 @@
 # 🍦 Calculadora de Costos de Helados
 
-Una aplicación web moderna para calcular costos de producción de helados, gestionar inventarios y simular escenarios de precios. Construida con Next.js 14, TypeScript, Tailwind CSS y Supabase.
+Una aplicación web moderna para calcular costos de producción de helados, gestionar inventarios y simular escenarios de precios. Construida con Next.js 13, TypeScript, Tailwind CSS y Supabase.
 
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
+![Next.js](https://img.shields.io/badge/Next.js-13-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38bdf8)
 ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green)
+![Estado](https://img.shields.io/badge/Estado-En%20Desarrollo-yellow)
+
+## 🎯 Estado del Proyecto
+
+**Progreso General: 75% Completado**
+
+### ✅ Completado
+- Estructura base del proyecto con Next.js 13 + TypeScript
+- Configuración de Tailwind CSS v3 con tema personalizado
+- Internacionalización completa (Español/Inglés)
+- Esquema de base de datos PostgreSQL completo
+- Row Level Security (RLS) configurado
+- Componentes UI base y layout principal
+- Páginas principales creadas
+- Sistema de autenticación configurado
+- Migraciones y configuración de Supabase
+
+### 🔄 En Progreso
+- Resolución de problemas de estilos en producción
+- Implementación de funcionalidad CRUD
+
+### ❌ Pendiente
+- Autenticación UI (Login/Register)
+- CRUD completo para ingredientes y recetas
+- Cálculos automáticos de costos
+- Testing completo
 
 ## ✨ Características
 
@@ -136,6 +162,18 @@ La aplicación soporta múltiples idiomas:
 - **Inglés** (en)
 
 Los archivos de traducción se encuentran en `/messages/`.
+
+## 📁 Archivos de Configuración
+
+### Para Supabase
+- `SUPABASE_PRODUCTION_SETUP.sql` - Script completo para configurar la base de datos
+- `SUPABASE_SAMPLE_DATA.sql` - Datos de ejemplo para testing
+- `supabase/migrations/` - Migraciones versionadas
+
+### Para Producción
+- `PRODUCTION_ROADMAP.md` - Roadmap detallado para despliegue
+- `PRODUCTION_ENV_SETUP.md` - Configuración de variables de entorno
+- `IMPLEMENTATION_GUIDE.md` - Guía completa de implementación
 
 ## 🚀 Despliegue
 
