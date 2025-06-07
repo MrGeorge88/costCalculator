@@ -5,6 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { SidebarProvider } from '@/contexts/SidebarContext';
 import { MainContent } from '@/components/layout/MainContent';
+import { AuthProvider } from '@/components/auth/AuthProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -43,15 +44,17 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <body className={`${inter.className} min-h-screen bg-gray-50`} style={{ minHeight: '100vh', backgroundColor: '#f8fafc', margin: '0', padding: '0' }}>
         <NextIntlClientProvider messages={messages}>
-          <SidebarProvider>
-            <div className="min-h-screen bg-slate-50">
-              <Header />
-              <Sidebar />
-              <MainContent>
-                {children}
-              </MainContent>
-            </div>
-          </SidebarProvider>
+          <AuthProvider>
+            <SidebarProvider>
+              <div className="min-h-screen bg-slate-50">
+                <Header />
+                <Sidebar />
+                <MainContent>
+                  {children}
+                </MainContent>
+              </div>
+            </SidebarProvider>
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>
