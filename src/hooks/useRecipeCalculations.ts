@@ -255,8 +255,8 @@ export function useRecipeCalculations(initialData?: RecipeData) {
         // Actualizar receta existente
         const { error: updateError } = await supabase
           .from('recetas')
-          .update(recipePayload as any)
-          .eq('id' as any, recipeData.id);
+          .update(recipePayload)
+          .eq('id', recipeData.id);
 
         if (updateError) throw updateError;
         recipeId = recipeData.id;
@@ -264,7 +264,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
         // Crear nueva receta
         const { data: newRecipe, error: insertError } = await supabase
           .from('recetas')
-          .insert(recipePayload as any)
+          .insert(recipePayload)
           .select()
           .single();
 
@@ -277,7 +277,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
         await supabase
           .from('receta_ingredientes')
           .delete()
-          .eq('receta_id' as any, recipeId);
+          .eq('receta_id', recipeId);
       }
 
       // Insertar ingredientes de la receta
@@ -293,7 +293,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
       if (ingredientPayloads.length > 0) {
         const { error: ingredientsError } = await supabase
           .from('receta_ingredientes')
-          .insert(ingredientPayloads as any);
+          .insert(ingredientPayloads);
 
         if (ingredientsError) throw ingredientsError;
       }
@@ -323,7 +323,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
       const { data: recipe, error: recipeError } = await supabase
         .from('recetas')
         .select('*')
-        .eq('id' as any, recipeId)
+        .eq('id', recipeId)
         .single();
 
       if (recipeError) throw recipeError;
@@ -335,7 +335,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
           *,
           ingrediente:ingredientes(*)
         `)
-        .eq('receta_id' as any, recipeId);
+        .eq('receta_id', recipeId);
 
       if (ingredientsError) throw ingredientsError;
 

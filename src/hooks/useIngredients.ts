@@ -74,7 +74,7 @@ export function useIngredients() {
 
       const { data, error } = await supabase
         .from('ingredientes')
-        .insert([ingredientData as any])
+        .insert([ingredientData])
         .select()
         .single();
 
@@ -112,8 +112,8 @@ export function useIngredients() {
 
       const { data, error } = await supabase
         .from('ingredientes')
-        .update(ingredientData as any)
-        .eq('id' as any, id)
+        .update(ingredientData)
+        .eq('id', id)
         .select()
         .single();
 
@@ -140,7 +140,7 @@ export function useIngredients() {
       const { error } = await supabase
         .from('ingredientes')
         .delete()
-        .eq('id' as any, id);
+        .eq('id', id);
 
       if (error) throw error;
 
@@ -161,7 +161,7 @@ export function useIngredients() {
       const { data, error } = await supabase
         .from('ingredientes')
         .select('*')
-        .eq('id' as any, id)
+        .eq('id', id)
         .single();
 
       if (error) throw error;

@@ -69,7 +69,7 @@ export function useRecipes() {
       const { data: recipe, error: recipeError } = await supabase
         .from('recetas')
         .select('*')
-        .eq('id' as any, id)
+        .eq('id', id)
         .single();
 
       if (recipeError) throw recipeError;
@@ -81,7 +81,7 @@ export function useRecipes() {
           *,
           ingrediente:ingredientes(*)
         `)
-        .eq('receta_id' as any, id);
+        .eq('receta_id', id);
 
       if (ingredientsError) throw ingredientsError;
 
@@ -106,7 +106,7 @@ export function useRecipes() {
       const { error: ingredientsError } = await supabase
         .from('receta_ingredientes')
         .delete()
-        .eq('receta_id' as any, id);
+        .eq('receta_id', id);
 
       if (ingredientsError) throw ingredientsError;
 
@@ -114,7 +114,7 @@ export function useRecipes() {
       const { error: recipeError } = await supabase
         .from('recetas')
         .delete()
-        .eq('id' as any, id);
+        .eq('id', id);
 
       if (recipeError) throw recipeError;
 
@@ -137,8 +137,8 @@ export function useRecipes() {
 
       const { data, error } = await supabase
         .from('recetas')
-        .update({ activa } as any)
-        .eq('id' as any, id)
+        .update({ activa })
+        .eq('id', id)
         .select()
         .single();
 
@@ -189,7 +189,7 @@ export function useRecipes() {
 
       const { data: newRecipe, error: recipeError } = await supabase
         .from('recetas')
-        .insert(newRecipeData as any)
+        .insert(newRecipeData)
         .select()
         .single();
 
@@ -208,7 +208,7 @@ export function useRecipes() {
 
         const { error: ingredientsError } = await supabase
           .from('receta_ingredientes')
-          .insert(ingredientData as any);
+          .insert(ingredientData);
 
         if (ingredientsError) throw ingredientsError;
       }
