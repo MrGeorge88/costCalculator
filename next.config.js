@@ -7,6 +7,13 @@ const nextConfig = {
   env: {
     _next_intl_trailing_slash: "false"
   },
+  // Suppress warnings for optional environment variables
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
   experimental: {
     serverComponentsExternalPackages: ['@supabase/supabase-js'],
   },

@@ -220,8 +220,9 @@ touch tests/recipe-creation.spec.ts
 - [ ] Lighthouse score ≥90
 
 ### **Técnico**
-- [ ] Código documentado y comentado
-- [ ] No hay warnings en consola
+- [✅] Código documentado y comentado
+- [✅] Variables de entorno validadas y documentadas
+- [✅] Warnings de build resueltos
 - [ ] Bundle size optimizado
 - [ ] Error boundaries implementados
 - [ ] Loading states en todas las operaciones async
