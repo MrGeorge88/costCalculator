@@ -5,7 +5,7 @@ import { validateClientEnv, validateServerEnv } from './env'
 // Validate and get environment variables
 const { supabaseUrl, supabaseAnonKey } = validateClientEnv()
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient<Database>(supabaseUrl!, supabaseAnonKey!, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
@@ -21,7 +21,7 @@ export const createServerClient = () => {
     throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY environment variable')
   }
 
-  return createClient<Database>(supabaseUrl, supabaseServiceKey, {
+  return createClient<Database>(supabaseUrl!, supabaseServiceKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false

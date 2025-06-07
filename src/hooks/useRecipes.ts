@@ -2,23 +2,13 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
+import { Database } from '@/types/database';
 
-export interface Recipe {
-  id: string;
-  nombre: string;
-  descripcion?: string | null;
-  categoria: string;
-  tiempo_preparacion?: number | null;
-  rendimiento: number;
-  unidad_rendimiento: string;
-  costo_total: number;
-  precio_sugerido?: number | null;
-  margen_ganancia?: number | null;
-  activa: boolean;
-  created_at: string;
-  updated_at: string;
-  user_id: string;
-}
+// Usar los tipos de la base de datos directamente
+export type Recipe = Database['public']['Tables']['recetas']['Row'];
+export type RecipeInsert = Database['public']['Tables']['recetas']['Insert'];
+export type RecipeUpdate = Database['public']['Tables']['recetas']['Update'];
+export type RecipeIngredientInsert = Database['public']['Tables']['receta_ingredientes']['Insert'];
 
 export interface RecipeWithIngredients extends Recipe {
   ingredientes?: {
@@ -53,7 +43,7 @@ export function useRecipes() {
         .order('nombre');
 
       if (error) throw error;
-      setRecipes(data || []);
+      setRecipes((data || []) as any);
     } catch (err) {
       console.error('Error loading recipes:', err);
       setError('Error al cargar recetas');
@@ -69,7 +59,7 @@ export function useRecipes() {
       const { data: recipe, error: recipeError } = await supabase
         .from('recetas')
         .select('*')
-        .eq('id', id)
+        .eq('id' as any, id)
         .single();
 
       if (recipeError) throw recipeError;
@@ -81,12 +71,12 @@ export function useRecipes() {
           *,
           ingrediente:ingredientes(*)
         `)
-        .eq('receta_id', id);
+        .eq('receta_id' as any, id);
 
       if (ingredientsError) throw ingredientsError;
 
       return {
-        ...recipe,
+        ...(recipe as any),
         ingredientes: ingredients || []
       };
     } catch (err) {
@@ -106,7 +96,7 @@ export function useRecipes() {
       const { error: ingredientsError } = await supabase
         .from('receta_ingredientes')
         .delete()
-        .eq('receta_id', id);
+        .eq('receta_id' as any, id);
 
       if (ingredientsError) throw ingredientsError;
 
@@ -114,7 +104,7 @@ export function useRecipes() {
       const { error: recipeError } = await supabase
         .from('recetas')
         .delete()
-        .eq('id', id);
+        .eq('id' as any, id);
 
       if (recipeError) throw recipeError;
 
@@ -137,8 +127,8 @@ export function useRecipes() {
 
       const { data, error } = await supabase
         .from('recetas')
-        .update({ activa })
-        .eq('id', id)
+        .update({ activa } as any)
+        .eq('id' as any, id)
         .select()
         .single();
 
@@ -175,7 +165,7 @@ export function useRecipes() {
       const originalRecipe = await getRecipeWithIngredients(id);
 
       // Crear nueva receta
-      const newRecipeData = {
+      const newRecipeData: RecipeInsert = {
         nombre: `${originalRecipe.nombre} (Copia)`,
         descripcion: originalRecipe.descripcion,
         categoria: originalRecipe.categoria,
@@ -189,7 +179,7 @@ export function useRecipes() {
 
       const { data: newRecipe, error: recipeError } = await supabase
         .from('recetas')
-        .insert(newRecipeData)
+        .insert(newRecipeData as any)
         .select()
         .single();
 
@@ -197,8 +187,8 @@ export function useRecipes() {
 
       // Copiar ingredientes si existen
       if (originalRecipe.ingredientes && originalRecipe.ingredientes.length > 0) {
-        const ingredientData = originalRecipe.ingredientes.map(ing => ({
-          receta_id: newRecipe.id,
+        const ingredientData: RecipeIngredientInsert[] = originalRecipe.ingredientes.map(ing => ({
+          receta_id: (newRecipe as any).id,
           ingrediente_id: ing.ingrediente.id,
           cantidad: ing.cantidad,
           unidad: ing.unidad,
@@ -208,13 +198,13 @@ export function useRecipes() {
 
         const { error: ingredientsError } = await supabase
           .from('receta_ingredientes')
-          .insert(ingredientData);
+          .insert(ingredientData as any);
 
         if (ingredientsError) throw ingredientsError;
       }
 
       // Actualizar la lista local
-      setRecipes(prev => [...prev, newRecipe]);
+      setRecipes(prev => [...prev, newRecipe as any]);
       return newRecipe;
     } catch (err) {
       console.error('Error duplicating recipe:', err);

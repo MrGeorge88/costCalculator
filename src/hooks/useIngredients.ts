@@ -59,7 +59,7 @@ export function useIngredients() {
         throw new Error('Usuario no autenticado');
       }
 
-      const ingredientData = {
+      const ingredientData: IngredientInsert = {
         nombre: formData.nombre.trim(),
         descripcion: formData.descripcion.trim() || null,
         unidad_medida: formData.unidad_medida,
@@ -74,7 +74,7 @@ export function useIngredients() {
 
       const { data, error } = await supabase
         .from('ingredientes')
-        .insert([ingredientData])
+        .insert([ingredientData as any])
         .select()
         .single();
 
@@ -98,7 +98,7 @@ export function useIngredients() {
       setLoading(true);
       setError(null);
 
-      const ingredientData = {
+      const ingredientData: IngredientUpdate = {
         nombre: formData.nombre.trim(),
         descripcion: formData.descripcion.trim() || null,
         unidad_medida: formData.unidad_medida,
@@ -112,8 +112,8 @@ export function useIngredients() {
 
       const { data, error } = await supabase
         .from('ingredientes')
-        .update(ingredientData)
-        .eq('id', id)
+        .update(ingredientData as any)
+        .eq('id' as any, id)
         .select()
         .single();
 
@@ -140,7 +140,7 @@ export function useIngredients() {
       const { error } = await supabase
         .from('ingredientes')
         .delete()
-        .eq('id', id);
+        .eq('id' as any, id);
 
       if (error) throw error;
 
@@ -161,7 +161,7 @@ export function useIngredients() {
       const { data, error } = await supabase
         .from('ingredientes')
         .select('*')
-        .eq('id', id)
+        .eq('id' as any, id)
         .single();
 
       if (error) throw error;

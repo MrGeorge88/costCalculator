@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
+import { Database } from '@/types/database';
 import {
   IngredientCalculation,
   RecipeCalculation,
@@ -13,6 +14,11 @@ import {
   calculateProfitMargin,
   calculatePresentation,
 } from '@/lib/calculations';
+
+// Usar los tipos de la base de datos directamente
+export type RecipeInsert = Database['public']['Tables']['recetas']['Insert'];
+export type RecipeUpdate = Database['public']['Tables']['recetas']['Update'];
+export type RecipeIngredientInsert = Database['public']['Tables']['receta_ingredientes']['Insert'];
 
 export interface RecipeIngredient {
   id?: string;
@@ -236,7 +242,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
       }
 
       // Guardar receta principal
-      const recipePayload = {
+      const recipePayload: RecipeInsert = {
         nombre: recipeData.nombre,
         descripcion: recipeData.descripcion,
         categoria: recipeData.categoria,
@@ -255,8 +261,8 @@ export function useRecipeCalculations(initialData?: RecipeData) {
         // Actualizar receta existente
         const { error: updateError } = await supabase
           .from('recetas')
-          .update(recipePayload)
-          .eq('id', recipeData.id);
+          .update(recipePayload as any)
+          .eq('id' as any, recipeData.id);
 
         if (updateError) throw updateError;
         recipeId = recipeData.id;
@@ -264,12 +270,12 @@ export function useRecipeCalculations(initialData?: RecipeData) {
         // Crear nueva receta
         const { data: newRecipe, error: insertError } = await supabase
           .from('recetas')
-          .insert(recipePayload)
+          .insert(recipePayload as any)
           .select()
           .single();
 
         if (insertError) throw insertError;
-        recipeId = newRecipe.id;
+        recipeId = (newRecipe as any).id;
       }
 
       // Eliminar ingredientes existentes si es actualización
@@ -277,11 +283,11 @@ export function useRecipeCalculations(initialData?: RecipeData) {
         await supabase
           .from('receta_ingredientes')
           .delete()
-          .eq('receta_id', recipeId);
+          .eq('receta_id' as any, recipeId);
       }
 
       // Insertar ingredientes de la receta
-      const ingredientPayloads = calculations.ingredientes.map(ing => ({
+      const ingredientPayloads: RecipeIngredientInsert[] = calculations.ingredientes.map(ing => ({
         receta_id: recipeId,
         ingrediente_id: ing.ingrediente_id,
         cantidad: ing.cantidad,
@@ -293,7 +299,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
       if (ingredientPayloads.length > 0) {
         const { error: ingredientsError } = await supabase
           .from('receta_ingredientes')
-          .insert(ingredientPayloads);
+          .insert(ingredientPayloads as any);
 
         if (ingredientsError) throw ingredientsError;
       }
@@ -323,7 +329,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
       const { data: recipe, error: recipeError } = await supabase
         .from('recetas')
         .select('*')
-        .eq('id', recipeId)
+        .eq('id' as any, recipeId)
         .single();
 
       if (recipeError) throw recipeError;
@@ -335,11 +341,11 @@ export function useRecipeCalculations(initialData?: RecipeData) {
           *,
           ingrediente:ingredientes(*)
         `)
-        .eq('receta_id', recipeId);
+        .eq('receta_id' as any, recipeId);
 
       if (ingredientsError) throw ingredientsError;
 
-      const recipeIngredients: RecipeIngredient[] = ingredients.map(ing => ({
+      const recipeIngredients: RecipeIngredient[] = (ingredients as any).map((ing: any) => ({
         id: ing.id,
         ingrediente_id: ing.ingrediente_id,
         cantidad: ing.cantidad,
@@ -348,15 +354,15 @@ export function useRecipeCalculations(initialData?: RecipeData) {
       }));
 
       setRecipeData({
-        id: recipe.id,
-        nombre: recipe.nombre,
-        descripcion: recipe.descripcion,
-        categoria: recipe.categoria,
-        tiempo_preparacion: recipe.tiempo_preparacion,
-        rendimiento: recipe.rendimiento,
-        unidad_rendimiento: recipe.unidad_rendimiento,
-        precio_sugerido: recipe.precio_sugerido,
-        margen_ganancia: recipe.margen_ganancia,
+        id: (recipe as any).id,
+        nombre: (recipe as any).nombre,
+        descripcion: (recipe as any).descripcion,
+        categoria: (recipe as any).categoria,
+        tiempo_preparacion: (recipe as any).tiempo_preparacion,
+        rendimiento: (recipe as any).rendimiento,
+        unidad_rendimiento: (recipe as any).unidad_rendimiento,
+        precio_sugerido: (recipe as any).precio_sugerido,
+        margen_ganancia: (recipe as any).margen_ganancia,
         ingredientes: recipeIngredients,
       });
     } catch (err) {
