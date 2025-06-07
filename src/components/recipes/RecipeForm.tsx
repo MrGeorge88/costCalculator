@@ -111,7 +111,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
             <Select
               label="Categoría"
               value={recipeData.categoria}
-              onChange={(value) => updateRecipeData({ categoria: value })}
+              onChange={(e) => updateRecipeData({ categoria: e.target.value })}
               options={RECIPE_CATEGORIES}
             />
           </div>
@@ -140,7 +140,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
               <Select
                 label="Unidad"
                 value={recipeData.unidad_rendimiento}
-                onChange={(value) => updateRecipeData({ unidad_rendimiento: value })}
+                onChange={(e) => updateRecipeData({ unidad_rendimiento: e.target.value })}
                 options={UNITS}
               />
             </div>
@@ -168,7 +168,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
           <div className="flex-1">
             <Select
               value={selectedIngredient}
-              onChange={setSelectedIngredient}
+              onChange={(e) => setSelectedIngredient(e.target.value)}
               options={availableIngredients.map(ing => ({
                 value: ing.id,
                 label: `${ing.nombre} (${ing.precio_por_unidad}/${ing.unidad_medida})`
@@ -216,7 +216,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
 
                   <Select
                     value={ingredient.unidad}
-                    onChange={(value) => updateIngredient(index, { unidad: value })}
+                    onChange={(e) => updateIngredient(index, { unidad: e.target.value })}
                     options={UNITS}
                     className="w-24"
                   />
