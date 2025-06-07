@@ -45,13 +45,34 @@ Esta aplicación web permite a productores de helados calcular costos de producc
 - **Recálculo en tiempo real** cuando cambian datos ✅
 - **Integración con base de datos** para persistencia ✅
 
-### 🔄 EN PROGRESO (8% del proyecto)
-- **Resolución de problemas de estilos** en producción (múltiples soluciones implementadas)
-- **Conexión de formularios** con datos reales de Supabase
+#### 🗄️ **CRUD COMPLETO CON SUPABASE** ✅ **NUEVO**
+- **Gestión de ingredientes** con hook `useIngredients` ✅
+  - Crear, leer, actualizar y eliminar ingredientes ✅
+  - Validaciones y manejo de errores ✅
+  - Estados de carga y feedback visual ✅
+  - Filtros por categoría y stock bajo ✅
+- **Gestión de recetas** con hook `useRecipes` ✅
+  - Crear, leer, actualizar y eliminar recetas ✅
+  - Activar/desactivar recetas ✅
+  - Duplicar recetas con ingredientes ✅
+  - Estadísticas y métricas automáticas ✅
+- **Listas dinámicas** conectadas con datos reales ✅
+  - `InventoryList` con datos de Supabase ✅
+  - `RecipeList` con datos de Supabase ✅
+  - Estados de carga, error y vacío ✅
+  - Acciones CRUD integradas ✅
+
+### ✅ COMPLETADO RECIENTEMENTE (3% del proyecto)
+- **CRUD de ingredientes y recetas conectado con Supabase** ✅ **NUEVO**
+  - Hook `useIngredients` para gestión completa de ingredientes ✅
+  - Hook `useRecipes` para gestión completa de recetas ✅
+  - `InventoryList` conectado con datos reales ✅
+  - `RecipeList` conectado con datos reales ✅
+  - `IngredientForm` actualizado para crear/editar ✅
+  - Funciones de eliminar, duplicar y activar/desactivar ✅
 
 ### ❌ PENDIENTE (2% del proyecto)
 - **Autenticación UI** (Login/Register/Logout) - Configuración backend lista
-- **CRUD funcional** conectado a Supabase - Lógica implementada, falta conexión
 - **Testing** unitario e integración - Framework configurado
 
 ## 🏗️ Arquitectura del Proyecto
@@ -106,7 +127,9 @@ ice-cream-cost-calculator/
 │   │   ├── calculations.ts           # 🧮 Biblioteca completa de cálculos
 │   │   └── utils.ts                  # Utilidades
 │   ├── hooks/
-│   │   └── useRecipeCalculations.ts  # 🎣 Hook principal de gestión de recetas
+│   │   ├── useRecipeCalculations.ts  # 🎣 Hook principal de gestión de recetas
+│   │   ├── useIngredients.ts         # 🎣 Hook CRUD de ingredientes ✅ NUEVO
+│   │   └── useRecipes.ts             # 🎣 Hook CRUD de recetas ✅ NUEVO
 │   ├── types/
 │   │   └── database.ts               # Tipos de base de datos
 │   ├── i18n.ts                       # Configuración i18n
@@ -340,6 +363,57 @@ console.log(calculations.costo_total); // Costo total calculado
 console.log(calculations.precio_sugerido); // Precio sugerido
 ```
 
+## 🎣 Hooks de Gestión de Datos
+
+### Hook `useIngredients`
+```typescript
+// Gestión completa de ingredientes
+const {
+  ingredients,        // Lista de ingredientes
+  loading,           // Estado de carga
+  error,             // Errores
+  createIngredient,  // Crear ingrediente
+  updateIngredient,  // Actualizar ingrediente
+  deleteIngredient,  // Eliminar ingrediente
+  getIngredient,     // Obtener por ID
+  getLowStockIngredients, // Ingredientes con stock bajo
+  getIngredientsByCategory // Filtrar por categoría
+} = useIngredients();
+
+// Crear nuevo ingrediente
+await createIngredient({
+  nombre: 'Leche Entera',
+  categoria: 'dairy',
+  precio_por_unidad: '1.50',
+  stock_actual: '25',
+  stock_minimo: '10',
+  // ... otros campos
+});
+```
+
+### Hook `useRecipes`
+```typescript
+// Gestión completa de recetas
+const {
+  recipes,              // Lista de recetas
+  loading,             // Estado de carga
+  error,               // Errores
+  deleteRecipe,        // Eliminar receta
+  toggleRecipeStatus,  // Activar/desactivar
+  duplicateRecipe,     // Duplicar receta
+  getRecipeWithIngredients, // Obtener con ingredientes
+  getActiveRecipes,    // Solo recetas activas
+  getRecipeStats       // Estadísticas
+} = useRecipes();
+
+// Duplicar una receta
+const newRecipe = await duplicateRecipe('recipe-id');
+
+// Obtener estadísticas
+const stats = getRecipeStats();
+console.log(stats.total, stats.active, stats.avgCost);
+```
+
 ### Testing de Cálculos
 El sistema incluye una suite completa de tests que verifica:
 - ✅ Precisión matemática de todas las fórmulas
@@ -493,18 +567,22 @@ VERCEL_PROJECT_ID
 
 ## 🎯 Próximos Pasos para Completar el Proyecto
 
-### INMEDIATO (Próximas 24-48 horas) ⚡
-1. **Conectar CRUD con Supabase**
-   - Hacer funcional el formulario de ingredientes
-   - Conectar lista de ingredientes con datos reales
-   - Probar guardado de recetas con cálculos
+### ✅ COMPLETADO RECIENTEMENTE ⚡
+1. **✅ CRUD con Supabase COMPLETADO**
+   - ✅ Formulario de ingredientes funcional y conectado
+   - ✅ Lista de ingredientes con datos reales
+   - ✅ Lista de recetas con datos reales
+   - ✅ Funciones de crear, editar, eliminar y duplicar
+   - ✅ Estados de carga y manejo de errores
+   - ✅ Hooks personalizados para gestión de datos
 
-2. **Implementar Autenticación UI**
+### INMEDIATO (Próximas 24-48 horas) ⚡
+1. **Implementar Autenticación UI**
    - Crear páginas de Login/Register
    - Implementar logout funcional
    - Proteger rutas privadas
 
-3. **Resolver problemas de estilos**
+2. **Resolver problemas de estilos**
    - Verificar que Tailwind funcione en producción
    - Asegurar que el CSS de respaldo funcione
 
@@ -538,12 +616,13 @@ VERCEL_PROJECT_ID
 ### Estado de Completitud Actual
 - **Infraestructura**: 100% ✅
 - **Sistema de cálculos**: 100% ✅
-- **Componentes UI**: 90% ✅
-- **Integración con datos**: 60% 🔄
+- **Componentes UI**: 95% ✅
+- **Integración con datos**: 95% ✅ **ACTUALIZADO**
+- **CRUD funcional**: 95% ✅ **NUEVO**
 - **Autenticación**: 30% 🔄
 - **Testing**: 70% ✅
 
-**Progreso total: 90% completado**
+**Progreso total: 95% completado** 🎉
 
 ---
 

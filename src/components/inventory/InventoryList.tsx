@@ -1,44 +1,23 @@
 'use client';
 
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Edit, Trash2, AlertTriangle } from 'lucide-react';
-
-// Mock data - en producción esto vendría de Supabase
-const mockIngredients = [
-  {
-    id: '1',
-    nombre: 'Leche Entera',
-    categoria: 'dairy',
-    unidad_medida: 'litros',
-    precio_por_unidad: 1.50,
-    stock_actual: 25,
-    stock_minimo: 10,
-    proveedor: 'Lácteos del Valle'
-  },
-  {
-    id: '2',
-    nombre: 'Azúcar Refinada',
-    categoria: 'sweeteners',
-    unidad_medida: 'kg',
-    precio_por_unidad: 0.80,
-    stock_actual: 5,
-    stock_minimo: 15,
-    proveedor: 'Azucarera Nacional'
-  },
-  {
-    id: '3',
-    nombre: 'Vainilla Natural',
-    categoria: 'flavorings',
-    unidad_medida: 'ml',
-    precio_por_unidad: 0.25,
-    stock_actual: 200,
-    stock_minimo: 50,
-    proveedor: 'Esencias Premium'
-  }
-];
+import { Edit, Trash2, AlertTriangle, Plus } from 'lucide-react';
+import Link from 'next/link';
+import { useIngredients } from '@/hooks/useIngredients';
+import { Button } from '@/components/ui/Button';
 
 export function InventoryList() {
   const t = useTranslations('inventory');
+  const {
+    ingredients,
+    loading,
+    error,
+    deleteIngredient,
+    loadIngredients
+  } = useIngredients();
+
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const getStockStatus = (current: number, minimum: number) => {
     if (current === 0) return 'out-of-stock';
@@ -56,6 +35,66 @@ export function InventoryList() {
         return 'bg-green-100 text-green-800';
     }
   };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR'
+    }).format(amount);
+  };
+
+  const handleDelete = async (id: string, nombre: string) => {
+    if (confirm(`¿Estás seguro de que quieres eliminar "${nombre}"?`)) {
+      try {
+        setDeletingId(id);
+        await deleteIngredient(id);
+      } catch (error) {
+        console.error('Error deleting ingredient:', error);
+      } finally {
+        setDeletingId(null);
+      }
+    }
+  };
+
+  if (loading && ingredients.length === 0) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-500">Cargando ingredientes...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <Button onClick={loadIngredients}>
+            Reintentar
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (ingredients.length === 0) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+        <div className="text-center">
+          <p className="text-gray-500 mb-4">No hay ingredientes registrados</p>
+          <Link href="/inventory/new">
+            <Button className="flex items-center space-x-2">
+              <Plus className="w-4 h-4" />
+              <span>Agregar Primer Ingrediente</span>
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -87,9 +126,10 @@ export function InventoryList() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {mockIngredients.map((ingredient) => {
+            {ingredients.map((ingredient) => {
               const stockStatus = getStockStatus(ingredient.stock_actual, ingredient.stock_minimo);
-              
+              const isDeleting = deletingId === ingredient.id;
+
               return (
                 <tr key={ingredient.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -124,10 +164,10 @@ export function InventoryList() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${ingredient.precio_por_unidad.toFixed(2)}
+                    {formatCurrency(ingredient.precio_por_unidad)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {ingredient.proveedor}
+                    {ingredient.proveedor || '-'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStockColor(stockStatus)}`}>
@@ -138,11 +178,22 @@ export function InventoryList() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
-                      <button className="text-blue-600 hover:text-blue-900 p-1">
+                      <Link
+                        href={`/inventory/${ingredient.id}/edit`}
+                        className="text-blue-600 hover:text-blue-900 p-1"
+                      >
                         <Edit className="w-4 h-4" />
-                      </button>
-                      <button className="text-red-600 hover:text-red-900 p-1">
-                        <Trash2 className="w-4 h-4" />
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(ingredient.id, ingredient.nombre)}
+                        disabled={isDeleting}
+                        className="text-red-600 hover:text-red-900 p-1 disabled:opacity-50"
+                      >
+                        {isDeleting ? (
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                        ) : (
+                          <Trash2 className="w-4 h-4" />
+                        )}
                       </button>
                     </div>
                   </td>

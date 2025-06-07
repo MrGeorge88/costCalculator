@@ -1,23 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select, SelectOption } from '@/components/ui/Select';
-import { supabase } from '@/lib/supabase';
+import { useIngredients, IngredientFormData } from '@/hooks/useIngredients';
 
-interface IngredientFormData {
-  nombre: string;
-  descripcion: string;
-  unidad_medida: string;
-  precio_por_unidad: string;
-  stock_actual: string;
-  stock_minimo: string;
-  proveedor: string;
-  categoria: string;
-  fecha_vencimiento: string;
+interface IngredientFormProps {
+  ingredientId?: string;
+  onSave?: () => void;
+  onCancel?: () => void;
 }
 
 const initialFormData: IngredientFormData = {
@@ -32,12 +26,48 @@ const initialFormData: IngredientFormData = {
   fecha_vencimiento: ''
 };
 
-export function IngredientForm() {
+export function IngredientForm({ ingredientId, onSave, onCancel }: IngredientFormProps) {
   const t = useTranslations('inventory');
   const router = useRouter();
+  const { createIngredient, updateIngredient, getIngredient } = useIngredients();
+
   const [formData, setFormData] = useState<IngredientFormData>(initialFormData);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<IngredientFormData>>({});
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Cargar datos del ingrediente si estamos editando
+  useEffect(() => {
+    if (ingredientId) {
+      setIsEditing(true);
+      loadIngredientData();
+    }
+  }, [ingredientId]);
+
+  const loadIngredientData = async () => {
+    if (!ingredientId) return;
+
+    try {
+      setLoading(true);
+      const ingredient = await getIngredient(ingredientId);
+
+      setFormData({
+        nombre: ingredient.nombre,
+        descripcion: ingredient.descripcion || '',
+        unidad_medida: ingredient.unidad_medida,
+        precio_por_unidad: ingredient.precio_por_unidad.toString(),
+        stock_actual: ingredient.stock_actual.toString(),
+        stock_minimo: ingredient.stock_minimo.toString(),
+        proveedor: ingredient.proveedor || '',
+        categoria: ingredient.categoria,
+        fecha_vencimiento: ingredient.fecha_vencimiento || ''
+      });
+    } catch (error) {
+      console.error('Error loading ingredient:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const categoryOptions: SelectOption[] = [
     { value: 'dairy', label: t('categories.dairy') },
@@ -103,7 +133,7 @@ export function IngredientForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -111,37 +141,30 @@ export function IngredientForm() {
     setLoading(true);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        throw new Error('Usuario no autenticado');
+      if (isEditing && ingredientId) {
+        await updateIngredient(ingredientId, formData);
+      } else {
+        await createIngredient(formData);
       }
 
-      const ingredientData = {
-        nombre: formData.nombre.trim(),
-        descripcion: formData.descripcion.trim() || null,
-        unidad_medida: formData.unidad_medida,
-        precio_por_unidad: parseFloat(formData.precio_por_unidad),
-        stock_actual: parseFloat(formData.stock_actual),
-        stock_minimo: parseFloat(formData.stock_minimo),
-        proveedor: formData.proveedor.trim() || null,
-        categoria: formData.categoria,
-        fecha_vencimiento: formData.fecha_vencimiento || null,
-        user_id: user.id
-      };
-
-      const { error } = await supabase
-        .from('ingredientes')
-        .insert([ingredientData]);
-
-      if (error) {
-        throw error;
+      // Limpiar formulario si es creación
+      if (!isEditing) {
+        setFormData(initialFormData);
       }
 
-      router.push('/inventory');
-    } catch (error) {
-      console.error('Error al crear ingrediente:', error);
-      // Aquí podrías mostrar un toast o mensaje de error
+      // Ejecutar callback si existe
+      if (onSave) {
+        onSave();
+      } else {
+        // Redirigir al inventario
+        router.push('/inventory');
+      }
+
+    } catch (error: any) {
+      console.error('Error saving ingredient:', error);
+      setErrors({
+        nombre: error.message || 'Error al guardar el ingrediente'
+      });
     } finally {
       setLoading(false);
     }
@@ -252,7 +275,7 @@ export function IngredientForm() {
         <Button
           type="button"
           variant="outline"
-          onClick={() => router.back()}
+          onClick={onCancel || (() => router.back())}
         >
           Cancelar
         </Button>
@@ -260,7 +283,7 @@ export function IngredientForm() {
           type="submit"
           loading={loading}
         >
-          {t('save')}
+          {isEditing ? 'Actualizar' : t('save')}
         </Button>
       </div>
     </form>
