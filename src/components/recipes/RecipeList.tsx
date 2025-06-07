@@ -30,7 +30,7 @@ export function RecipeList() {
     }).format(amount);
   };
 
-  const formatTime = (minutes: number) => {
+  const formatTime = (minutes: number | undefined) => {
     if (!minutes) return '-';
     if (minutes < 60) {
       return `${minutes} min`;
