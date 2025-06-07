@@ -73,7 +73,7 @@ export function KpiCard({
         className
       )}
       title={tooltip}
-      whileHover={{ y: -2, shadow: '0 10px 25px rgba(0,0,0,0.1)' }}
+      whileHover={{ y: -2 }}
     >
       <div className="flex items-center justify-between">
         <div className="flex-1">

@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 
 interface SidebarContextType {
   isOpen: boolean;
@@ -14,9 +14,9 @@ const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 export function SidebarProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(true); // Default to open on desktop
 
-  const toggle = () => setIsOpen(!isOpen);
-  const open = () => setIsOpen(true);
-  const close = () => setIsOpen(false);
+  const toggle = useCallback(() => setIsOpen(!isOpen), [isOpen]);
+  const open = useCallback(() => setIsOpen(true), []);
+  const close = useCallback(() => setIsOpen(false), []);
 
   // Keyboard shortcuts
   useEffect(() => {

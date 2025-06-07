@@ -2,7 +2,6 @@
 
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'success' | 'warning';
@@ -44,10 +43,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     return (
-      <motion.button
+      <button
         ref={ref}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
         className={cn(
           baseClasses,
           variants[variant],
@@ -73,7 +70,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {!loading && icon && iconPosition === 'right' && (
           <span className="flex-shrink-0">{icon}</span>
         )}
-      </motion.button>
+      </button>
     );
   }
 );
