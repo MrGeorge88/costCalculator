@@ -6,14 +6,14 @@ import { supabase } from '@/lib/supabase';
 export interface Recipe {
   id: string;
   nombre: string;
-  descripcion?: string;
+  descripcion?: string | null;
   categoria: string;
-  tiempo_preparacion?: number;
+  tiempo_preparacion?: number | null;
   rendimiento: number;
   unidad_rendimiento: string;
   costo_total: number;
-  precio_sugerido?: number;
-  margen_ganancia?: number;
+  precio_sugerido?: number | null;
+  margen_ganancia?: number | null;
   activa: boolean;
   created_at: string;
   updated_at: string;

@@ -6,14 +6,14 @@ import { supabase } from '@/lib/supabase';
 export interface Ingredient {
   id: string;
   nombre: string;
-  descripcion?: string;
+  descripcion?: string | null;
   unidad_medida: string;
   precio_por_unidad: number;
   stock_actual: number;
   stock_minimo: number;
-  proveedor?: string;
+  proveedor?: string | null;
   categoria: string;
-  fecha_vencimiento?: string;
+  fecha_vencimiento?: string | null;
   created_at: string;
   updated_at: string;
   user_id: string;
