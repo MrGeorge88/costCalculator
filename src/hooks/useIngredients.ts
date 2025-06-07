@@ -4,8 +4,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Database } from '@/types/database';
 
-// Usar el tipo de la base de datos directamente
+// Usar los tipos de la base de datos directamente
 export type Ingredient = Database['public']['Tables']['ingredientes']['Row'];
+export type IngredientInsert = Database['public']['Tables']['ingredientes']['Insert'];
+export type IngredientUpdate = Database['public']['Tables']['ingredientes']['Update'];
 
 export interface IngredientFormData {
   nombre: string;
@@ -57,7 +59,7 @@ export function useIngredients() {
         throw new Error('Usuario no autenticado');
       }
 
-      const ingredientData = {
+      const ingredientData: IngredientInsert = {
         nombre: formData.nombre.trim(),
         descripcion: formData.descripcion.trim() || null,
         unidad_medida: formData.unidad_medida,
@@ -96,7 +98,7 @@ export function useIngredients() {
       setLoading(true);
       setError(null);
 
-      const ingredientData = {
+      const ingredientData: IngredientUpdate = {
         nombre: formData.nombre.trim(),
         descripcion: formData.descripcion.trim() || null,
         unidad_medida: formData.unidad_medida,
