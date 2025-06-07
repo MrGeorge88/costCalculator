@@ -13,12 +13,12 @@ interface MainLayoutProps {
 export function MainLayout({ children }: MainLayoutProps) {
   return (
     <SidebarProvider>
-      <div className="flex h-screen bg-slate-50">
-        {/* Sidebar - DEBE estar primero para aparecer a la izquierda */}
+      <div className="bg-slate-50">
+        {/* Sidebar - Posición fija */}
         <Sidebar />
 
-        {/* Main content area - Columna derecha */}
-        <div className="flex flex-col flex-1 min-w-0">
+        {/* Main content area - Con margen izquierdo para el sidebar */}
+        <div className="lg:ml-72 ml-0 min-h-screen">
           {/* Header */}
           <Header />
 

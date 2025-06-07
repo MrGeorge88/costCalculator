@@ -71,12 +71,21 @@ export function Sidebar() {
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className={cn(
-          "h-full bg-white shadow-lg border-r border-gray-200 overflow-hidden flex flex-col flex-shrink-0",
-          // Desktop: siempre visible en el lado izquierdo
+          // POSICIÓN FIJA para que quede anclado a la izquierda
+          "fixed inset-y-0 left-0",
+          // ALTURA COMPLETA y ANCHO FIJO
+          "h-screen flex flex-col",
+          // ESTILOS VISUALES
+          "bg-white shadow-lg border-r border-gray-200 overflow-hidden",
+          // Z-INDEX para estar por encima
+          "z-50",
+          // RESPONSIVE: visible en desktop, overlay en mobile
           "hidden lg:flex",
-          // Mobile: overlay cuando está abierto
-          isOpen && "fixed inset-y-0 left-0 z-50 flex lg:relative lg:z-auto"
+          isOpen && "flex"
         )}
+        style={{
+          width: isOpen ? '240px' : '72px'
+        }}
       >
         {/* Search Section - Only when expanded */}
         <AnimatePresence>
