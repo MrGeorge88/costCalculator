@@ -4,12 +4,15 @@ import { RecentActivity } from '@/components/dashboard/RecentActivity';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { TailwindTest } from '@/components/test/TailwindTest';
 import { CalculationTest } from '@/components/test/CalculationTest';
+import { LayoutTest } from '@/components/test/LayoutTest';
 
 export default function HomePage() {
   const t = useTranslations('dashboard');
 
   return (
     <div className="space-y-6" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <LayoutTest />
+
       <TailwindTest />
 
       <div style={{ marginBottom: '1.5rem' }}>
