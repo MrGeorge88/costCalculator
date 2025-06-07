@@ -40,9 +40,16 @@ const getIngredient = useCallback(async (id: string) => {
 
 ## ✅ Solución Implementada
 
-### **Corrección Aplicada**
+### **Corrección 1: Usar Tipos de Database Directamente**
 ```typescript
-// ✅ Con tipo de retorno explícito y validación
+// ✅ Usar tipo de la base de datos
+import { Database } from '@/types/database';
+export type Ingredient = Database['public']['Tables']['ingredientes']['Row'];
+```
+
+### **Corrección 2: Type Assertions en Queries**
+```typescript
+// ✅ Con type assertions correctas
 const getIngredient = useCallback(async (id: string): Promise<Ingredient> => {
   try {
     const { data, error } = await supabase
@@ -53,7 +60,7 @@ const getIngredient = useCallback(async (id: string): Promise<Ingredient> => {
 
     if (error) throw error;
     if (!data) throw new Error('Ingrediente no encontrado');
-    
+
     return data as Ingredient; // Tipo explícito
   } catch (err) {
     console.error('Error getting ingredient:', err);
@@ -61,13 +68,21 @@ const getIngredient = useCallback(async (id: string): Promise<Ingredient> => {
     throw err;
   }
 }, []);
+
+// ✅ En loadIngredients
+setIngredients((data || []) as Ingredient[]);
+
+// ✅ En createIngredient y updateIngredient
+setIngredients(prev => [...prev, data as Ingredient]);
+setIngredients(prev => prev.map(ing => ing.id === id ? data as Ingredient : ing));
 ```
 
 ### **Mejoras Implementadas**
-1. **Tipo de retorno explícito**: `Promise<Ingredient>`
-2. **Validación adicional**: Verificar que `data` no sea null
-3. **Type assertion**: `data as Ingredient` para garantizar el tipo
-4. **Error handling mejorado**: Mensaje específico para ingrediente no encontrado
+1. **Tipos consistentes**: Usar tipos de database directamente
+2. **Type assertions**: En todas las operaciones de Supabase
+3. **Tipo de retorno explícito**: `Promise<Ingredient>`
+4. **Validación adicional**: Verificar que `data` no sea null
+5. **Error handling mejorado**: Mensajes específicos
 
 ## 🎯 Resultado
 
@@ -95,7 +110,8 @@ npm run type-check
 ```
 
 ### **Vercel**
-- ✅ **Commit**: `8a846bc` - "fix: corregir tipo de retorno en getIngredient"
+- ✅ **Commit 1**: `8a846bc` - "fix: corregir tipo de retorno en getIngredient"
+- ✅ **Commit 2**: `580f4c2` - "fix: usar tipos de database directamente"
 - ✅ **Push**: Enviado exitosamente
 - ✅ **Build**: Se ejecutará automáticamente sin errores
 

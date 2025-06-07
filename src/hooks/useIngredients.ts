@@ -36,7 +36,7 @@ export function useIngredients() {
         .order('nombre');
 
       if (error) throw error;
-      setIngredients((data || []) as Ingredient[]);
+      setIngredients((data || []) as unknown as Ingredient[]);
     } catch (err) {
       console.error('Error loading ingredients:', err);
       setError('Error al cargar ingredientes');
@@ -79,7 +79,7 @@ export function useIngredients() {
       if (error) throw error;
 
       // Actualizar la lista local
-      setIngredients(prev => [...prev, data as Ingredient]);
+      setIngredients(prev => [...prev, data as unknown as Ingredient]);
       return data;
     } catch (err) {
       console.error('Error creating ingredient:', err);
@@ -118,7 +118,7 @@ export function useIngredients() {
       if (error) throw error;
 
       // Actualizar la lista local
-      setIngredients(prev => prev.map(ing => ing.id === id ? data as Ingredient : ing));
+      setIngredients(prev => prev.map(ing => ing.id === id ? data as unknown as Ingredient : ing));
       return data;
     } catch (err) {
       console.error('Error updating ingredient:', err);
@@ -165,7 +165,7 @@ export function useIngredients() {
       if (error) throw error;
       if (!data) throw new Error('Ingrediente no encontrado');
 
-      return data as Ingredient;
+      return data as unknown as Ingredient;
     } catch (err) {
       console.error('Error getting ingredient:', err);
       setError('Error al obtener ingrediente');
