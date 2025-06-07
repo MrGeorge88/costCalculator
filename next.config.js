@@ -18,7 +18,24 @@ const nextConfig = {
       },
     ],
   },
-
+  env: {
+    _next_intl_trailing_slash: 'false'
+  },
+  webpack: (config, { isServer }) => {
+    // Ignore node-specific modules when bundling for the browser
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+        crypto: false,
+        bufferutil: false,
+        'utf-8-validate': false,
+      };
+    }
+    return config;
+  },
 };
 
 module.exports = withNextIntl(nextConfig);

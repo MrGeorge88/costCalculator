@@ -87,7 +87,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
   // Recalcular costos cuando cambian los ingredientes o el rendimiento
   useEffect(() => {
     calculateRecipeCosts();
-  }, [recipeData.ingredientes, recipeData.rendimiento]);
+  }, [recipeData.ingredientes, recipeData.rendimiento, calculateRecipeCosts]);
 
   // Función para calcular todos los costos de la receta
   const calculateRecipeCosts = useCallback(() => {
