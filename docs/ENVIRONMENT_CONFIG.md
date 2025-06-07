@@ -51,7 +51,7 @@ vercel env add SUPABASE_SERVICE_ROLE_KEY
 
 ## ⚠️ Solución a Warnings
 
-Los warnings que ves son normales y se deben a:
+Los warnings que puedes ver son normales y se deben a:
 
 ### **Variables Opcionales**
 - `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` son opcionales
@@ -152,3 +152,46 @@ npm run dev
 ```
 
 Si todo funciona correctamente, los warnings son normales y no requieren acción.
+
+## 🌍 Configuración por Entorno
+
+### **Desarrollo (.env.local)**
+```bash
+NODE_ENV=development
+NEXT_PUBLIC_SUPABASE_URL=https://dev-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=dev_anon_key
+SUPABASE_SERVICE_ROLE_KEY=dev_service_key
+```
+
+### **Staging (.env.staging)**
+```bash
+NODE_ENV=staging
+NEXT_PUBLIC_SUPABASE_URL=https://staging-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=staging_anon_key
+SUPABASE_SERVICE_ROLE_KEY=staging_service_key
+```
+
+### **Producción (Vercel Dashboard)**
+```bash
+NODE_ENV=production
+NEXT_PUBLIC_SUPABASE_URL=https://prod-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=prod_anon_key
+SUPABASE_SERVICE_ROLE_KEY=prod_service_key
+```
+
+## 🔄 Migración de Variables
+
+Si cambias de proyecto de Supabase:
+
+1. **Actualizar URLs y Keys**
+2. **Migrar datos** (si es necesario)
+3. **Actualizar políticas RLS**
+4. **Verificar autenticación**
+5. **Probar todas las funcionalidades**
+
+## 📝 Notas Importantes
+
+- **Nunca** commitees archivos `.env.local`
+- **Siempre** usa `.env.example` como plantilla
+- **Verifica** que las variables estén en Vercel para producción
+- **Documenta** cualquier nueva variable que agregues

@@ -1,44 +1,82 @@
-# 🍦 Calculadora de Costos de Helados
+# 🍦 Ice Cost Calculator
 
-Una aplicación web moderna para calcular costos de producción de helados, gestionar inventarios y simular escenarios de precios. Construida con Next.js 13, TypeScript, Tailwind CSS y Supabase.
+Una aplicación web profesional para calcular costos de producción de helados artesanales, con gestión completa de inventario, recetas y simulación de escenarios.
 
 ![Next.js](https://img.shields.io/badge/Next.js-13-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38bdf8)
 ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green)
-![Estado](https://img.shields.io/badge/Estado-En%20Desarrollo-yellow)
+![Estado](https://img.shields.io/badge/Estado-90%25%20Completado-brightgreen)
+
+## 📚 Documentación
+
+Para información detallada del proyecto, consulta la [documentación completa](./docs/README.md):
+
+- **[Resumen del Proyecto](./docs/PROJECT_OVERVIEW.md)** - Visión general y características
+- **[Guía de Configuración](./docs/SETUP_GUIDE.md)** - Configuración paso a paso
+- **[Estado de Implementación](./docs/IMPLEMENTATION_STATUS.md)** - Progreso actual
+- **[Configuración de Entorno](./docs/ENVIRONMENT_CONFIG.md)** - Variables de entorno
+- **[Setup de Supabase](./docs/SUPABASE_SETUP.sql)** - Script de base de datos
 
 ## 🎯 Estado del Proyecto
 
-**Progreso General: 75% Completado**
+**Progreso General: 90% Completado**
 
-### ✅ Completado
-- Estructura base del proyecto con Next.js 13 + TypeScript
-- Configuración de Tailwind CSS v3 con tema personalizado
-- Internacionalización completa (Español/Inglés)
-- Esquema de base de datos PostgreSQL completo
-- Row Level Security (RLS) configurado
-- Componentes UI base y layout principal
-- Páginas principales creadas
-- Sistema de autenticación configurado
-- Migraciones y configuración de Supabase
+### ✅ Completado (90%)
+- ✅ Sistema de autenticación completo (Supabase Auth)
+- ✅ UI/UX profesional con sidebar izquierdo
+- ✅ Gestión de inventario (CRUD ingredientes)
+- ✅ Gestión de recetas (CRUD recetas)
+- ✅ Motor de cálculo automático de costos
+- ✅ Internacionalización completa (ES/EN)
+- ✅ Responsive design mobile-first
+- ✅ Variables de entorno configuradas
+- ✅ Base de datos Supabase configurada
 
-### 🔄 En Progreso
-- Resolución de problemas de estilos en producción
-- Implementación de funcionalidad CRUD
+### 🔄 En Progreso (10%)
+- [ ] Testing suite completo
+- [ ] Optimización de performance
+- [ ] Error boundaries
 
-### ❌ Pendiente
-- Autenticación UI (Login/Register)
-- CRUD completo para ingredientes y recetas
-- Cálculos automáticos de costos
-- Testing completo
+### 🎯 Listo para Producción
+El proyecto está **90% completo** con todas las funcionalidades core implementadas.
 
-## ✨ Características
+## ✨ Características Principales
 
-- 📊 **Gestión de Inventario**: Control completo de ingredientes y materias primas
-- 🧾 **Cálculo de Recetas**: Creación de recetas con cálculo automático de costos
-- 📦 **Presentaciones Comerciales**: Fraccionamiento en diferentes tamaños de venta
-- 🎯 **Simulador de Escenarios**: Análisis de impacto de cambios de precios
+### 🔐 **Sistema de Autenticación**
+- ✅ Registro y login de usuarios
+- ✅ Recuperación de contraseña
+- ✅ Rutas protegidas con AuthGuard
+- ✅ Gestión automática de sesiones
+
+### 📦 **Gestión de Inventario**
+- ✅ CRUD completo de ingredientes
+- ✅ Categorización por tipo
+- ✅ Control de stock y proveedores
+- ✅ Búsqueda y filtros avanzados
+
+### 👨‍🍳 **Gestión de Recetas**
+- ✅ Creación y edición de recetas
+- ✅ Cálculo automático de costos
+- ✅ Gestión de ingredientes por receta
+- ✅ Categorización y organización
+
+### 🧮 **Motor de Cálculo**
+- ✅ Cálculo automático de costos
+- ✅ Conversión de unidades
+- ✅ Márgenes de ganancia
+- ✅ Análisis de rentabilidad
+
+### 🎨 **UI/UX Profesional**
+- ✅ Diseño moderno y responsive
+- ✅ Sidebar de navegación colapsible
+- ✅ Animaciones suaves con Framer Motion
+- ✅ Tema profesional consistente
+
+### 🌐 **Internacionalización**
+- ✅ Soporte para Español e Inglés
+- ✅ Cambio dinámico de idioma
+- ✅ URLs localizadas
 - 🌍 **Multiidioma**: Soporte para Español e Inglés
 - 🔐 **Autenticación Segura**: Sistema de usuarios con Supabase Auth
 - 📱 **Responsive**: Diseño adaptativo para todos los dispositivos
