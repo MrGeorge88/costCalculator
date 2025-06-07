@@ -69,7 +69,7 @@ export function useRecipes() {
       const { data: recipe, error: recipeError } = await supabase
         .from('recetas')
         .select('*')
-        .eq('id', id)
+        .eq('id' as any, id)
         .single();
 
       if (recipeError) throw recipeError;
@@ -81,7 +81,7 @@ export function useRecipes() {
           *,
           ingrediente:ingredientes(*)
         `)
-        .eq('receta_id', id);
+        .eq('receta_id' as any, id);
 
       if (ingredientsError) throw ingredientsError;
 
@@ -106,7 +106,7 @@ export function useRecipes() {
       const { error: ingredientsError } = await supabase
         .from('receta_ingredientes')
         .delete()
-        .eq('receta_id', id);
+        .eq('receta_id' as any, id);
 
       if (ingredientsError) throw ingredientsError;
 
@@ -114,7 +114,7 @@ export function useRecipes() {
       const { error: recipeError } = await supabase
         .from('recetas')
         .delete()
-        .eq('id', id);
+        .eq('id' as any, id);
 
       if (recipeError) throw recipeError;
 
@@ -138,7 +138,7 @@ export function useRecipes() {
       const { data, error } = await supabase
         .from('recetas')
         .update({ activa } as any)
-        .eq('id', id)
+        .eq('id' as any, id)
         .select()
         .single();
 

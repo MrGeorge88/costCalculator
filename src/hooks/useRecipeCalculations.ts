@@ -256,7 +256,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
         const { error: updateError } = await supabase
           .from('recetas')
           .update(recipePayload as any)
-          .eq('id', recipeData.id);
+          .eq('id' as any, recipeData.id);
 
         if (updateError) throw updateError;
         recipeId = recipeData.id;
@@ -277,7 +277,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
         await supabase
           .from('receta_ingredientes')
           .delete()
-          .eq('receta_id', recipeId);
+          .eq('receta_id' as any, recipeId);
       }
 
       // Insertar ingredientes de la receta
@@ -323,7 +323,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
       const { data: recipe, error: recipeError } = await supabase
         .from('recetas')
         .select('*')
-        .eq('id', recipeId)
+        .eq('id' as any, recipeId)
         .single();
 
       if (recipeError) throw recipeError;
@@ -335,7 +335,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
           *,
           ingrediente:ingredientes(*)
         `)
-        .eq('receta_id', recipeId);
+        .eq('receta_id' as any, recipeId);
 
       if (ingredientsError) throw ingredientsError;
 
