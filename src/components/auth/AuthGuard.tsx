@@ -33,7 +33,7 @@ export function AuthGuard({
         router.push(loginUrl)
       } else if (!requireAuth && user) {
         // User is authenticated but shouldn't be (e.g., on login page)
-        router.push('/dashboard')
+        router.push('/')
       }
     }
   }, [user, loading, requireAuth, router, pathname, redirectTo])
@@ -104,7 +104,7 @@ export function useAuthGuard(requireAuth: boolean = true) {
     if (requireAuth) {
       router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`)
     } else {
-      router.push('/dashboard')
+      router.push('/')
     }
   }
 

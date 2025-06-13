@@ -87,7 +87,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         // Handle auth events
         if (event === 'SIGNED_IN') {
-          router.push('/dashboard')
+          router.push('/')
         } else if (event === 'SIGNED_OUT') {
           router.push('/auth/login')
         }
