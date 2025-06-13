@@ -21,7 +21,7 @@ function MainLayoutContent({ children }: MainLayoutProps) {
       {/* Contenido principal - CON MARGIN-LEFT DINÁMICO PARA EL SIDEBAR */}
       <div
         className={`flex flex-col min-h-screen transition-all duration-300 ease-in-out ${
-          isOpen ? 'lg:ml-60' : 'lg:ml-18'
+          isOpen ? 'ml-60' : 'ml-18'
         }`}
       >
         <Header />

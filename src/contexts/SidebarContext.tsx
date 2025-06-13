@@ -34,19 +34,10 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, toggle, close]);
 
-  // Set sidebar state based on screen size
+  // Keep sidebar open by default - user can toggle manually
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 1024) {
-        setIsOpen(false); // Collapsed on mobile
-      } else {
-        setIsOpen(true); // Expanded on desktop
-      }
-    };
-
-    handleResize(); // Check initial size
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    // Set initial state to open
+    setIsOpen(true);
   }, []);
 
   return (

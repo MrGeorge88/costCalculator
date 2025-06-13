@@ -35,6 +35,9 @@ export function Sidebar() {
   const pathname = usePathname();
   const { isOpen, close } = useSidebar();
 
+  // Debug: Log sidebar state
+  console.log('Sidebar render - isOpen:', isOpen);
+
   // Close sidebar on mobile when clicking outside
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -50,14 +53,14 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Mobile Overlay */}
+      {/* Mobile Overlay - Solo en pantallas muy pequeñas */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 lg:hidden"
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
             onClick={close}
           />
         )}
@@ -77,13 +80,12 @@ export function Sidebar() {
           "fixed inset-y-0 left-0 z-50",
           // Estilos visuales
           "bg-white shadow-lg border-r border-gray-200 overflow-hidden",
-          // Desktop: siempre visible
-          "hidden lg:flex",
-          // Mobile: solo visible cuando está abierto
-          isOpen && "flex"
+          // Debug: hacer más visible
+          "border-4 border-red-500"
         )}
         style={{
-          width: isOpen ? '240px' : '72px'
+          width: isOpen ? '240px' : '72px',
+          display: 'flex' // Forzar que siempre sea visible
         }}
       >
         {/* Search Section - Only when expanded */}

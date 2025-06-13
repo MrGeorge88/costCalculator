@@ -35,6 +35,7 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
   }
   
   // For authenticated users on non-auth pages, use the main layout with sidebar
+  console.log('ConditionalLayout: Using MainLayout for authenticated user');
   return (
     <MainLayout>
       {children}
