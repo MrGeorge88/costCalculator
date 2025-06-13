@@ -14,7 +14,8 @@ body {
   background-color: #f9fafb;
 }
 
-/* Navbar */
+/* Navbar - DISABLED: Using React components instead */
+/*
 nav {
   background-color: white;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
@@ -24,7 +25,9 @@ nav {
   top: 0;
   z-index: 50;
 }
+*/
 
+/*
 nav .container {
   padding: 1rem 1.5rem;
 }
@@ -59,8 +62,10 @@ nav h1 {
   font-weight: bold;
   color: #111827;
 }
+*/
 
-/* Sidebar */
+/* Sidebar - DISABLED: Using React components instead */
+/*
 aside {
   background-color: #374151;
   width: 16rem;
@@ -70,7 +75,9 @@ aside {
   left: 0;
   padding: 1.5rem 0;
 }
+*/
 
+/*
 aside ul {
   list-style: none;
 }
@@ -98,14 +105,17 @@ aside a.active {
   background-color: #2563eb;
   color: white;
 }
+*/
 
-/* Main content */
+/* Main content - DISABLED: Using React components instead */
+/*
 main {
   margin-left: 16rem;
   margin-top: 4rem;
   padding: 1.5rem;
   min-height: calc(100vh - 4rem);
 }
+*/
 
 /* Cards */
 .card {
