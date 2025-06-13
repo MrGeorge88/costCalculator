@@ -63,7 +63,7 @@ export function Sidebar() {
         )}
       </AnimatePresence>
 
-      {/* Sidebar - SOLUCIÓN CLAUDE: Flexbox responsive correcto */}
+      {/* Sidebar - POSICIONAMIENTO FIJO COMO PREFIERES */}
       <motion.aside
         initial={false}
         animate={{
@@ -71,14 +71,16 @@ export function Sidebar() {
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className={cn(
-          // Base: flex column, no shrink
-          "flex flex-col flex-shrink-0 h-full",
+          // Base: flex column con posicionamiento fijo
+          "flex flex-col",
+          // Posicionamiento fijo en desktop y mobile
+          "fixed inset-y-0 left-0 z-50",
           // Estilos visuales
           "bg-white shadow-lg border-r border-gray-200 overflow-hidden",
-          // Desktop: siempre visible, solo cambia ancho
+          // Desktop: siempre visible
           "hidden lg:flex",
-          // Mobile: fixed overlay cuando está abierto
-          isOpen && "fixed inset-y-0 left-0 z-50 flex lg:relative lg:z-auto"
+          // Mobile: solo visible cuando está abierto
+          isOpen && "flex"
         )}
         style={{
           width: isOpen ? '240px' : '72px'

@@ -3,29 +3,42 @@
 import { ReactNode } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
-import { SidebarProvider } from '@/contexts/SidebarContext';
+import { SidebarProvider, useSidebar } from '@/contexts/SidebarContext';
 import { MainContent } from './MainContent';
 
 interface MainLayoutProps {
   children: ReactNode;
 }
 
+function MainLayoutContent({ children }: MainLayoutProps) {
+  const { isOpen } = useSidebar();
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      {/* Sidebar - POSICIÓN FIJA A LA IZQUIERDA */}
+      <Sidebar />
+
+      {/* Contenido principal - CON MARGIN-LEFT DINÁMICO PARA EL SIDEBAR */}
+      <div
+        className={`flex flex-col min-h-screen transition-all duration-300 ease-in-out ${
+          isOpen ? 'lg:ml-60' : 'lg:ml-18'
+        }`}
+      >
+        <Header />
+        <MainContent>
+          {children}
+        </MainContent>
+      </div>
+    </div>
+  );
+}
+
 export function MainLayout({ children }: MainLayoutProps) {
   return (
     <SidebarProvider>
-      {/* SOLUCIÓN CLAUDE: Flexbox simple y directo */}
-      <div className="flex min-h-screen bg-slate-50">
-        {/* Sidebar - IZQUIERDA */}
-        <Sidebar />
-
-        {/* Contenido principal - DERECHA */}
-        <div className="flex flex-col flex-1 min-w-0">
-          <Header />
-          <MainContent>
-            {children}
-          </MainContent>
-        </div>
-      </div>
+      <MainLayoutContent>
+        {children}
+      </MainLayoutContent>
     </SidebarProvider>
   );
 }

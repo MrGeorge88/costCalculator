@@ -1,7 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { Inter } from 'next/font/google';
-import { MainLayout } from '@/components/layout/MainLayout';
+import { ConditionalLayout } from '@/components/layout/ConditionalLayout';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -42,9 +42,9 @@ export default async function LocaleLayout({
       <body className={`${inter.className} min-h-screen bg-gray-50`} style={{ minHeight: '100vh', backgroundColor: '#f8fafc', margin: '0', padding: '0' }}>
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>
-            <MainLayout>
+            <ConditionalLayout>
               {children}
-            </MainLayout>
+            </ConditionalLayout>
           </AuthProvider>
         </NextIntlClientProvider>
       </body>

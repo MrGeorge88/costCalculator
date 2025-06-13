@@ -298,6 +298,17 @@ button:active {
   transform: translateY(0);
 }
 
+/* Sidebar Layout Utilities */
+@layer utilities {
+  .ml-18 {
+    margin-left: 4.5rem; /* 72px */
+  }
+
+  .ml-60 {
+    margin-left: 15rem; /* 240px */
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .stats-grid {
