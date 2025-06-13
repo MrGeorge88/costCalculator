@@ -140,7 +140,8 @@ main {
   margin-bottom: 0.5rem;
 }
 
-/* Grid */
+/* Grid - DISABLED: Using Tailwind CSS instead for responsive design */
+/*
 .grid {
   display: grid;
   gap: 1.5rem;
@@ -161,6 +162,7 @@ main {
 .grid-cols-4 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+*/
 
 /* Stats */
 .stat-card {

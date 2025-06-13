@@ -287,14 +287,38 @@ export function useRecipeCalculations(initialData?: RecipeData) {
       }
 
       // Insertar ingredientes de la receta
-      const ingredientPayloads: RecipeIngredientInsert[] = calculations.ingredientes.map(ing => ({
-        receta_id: recipeId,
-        ingrediente_id: ing.ingrediente_id,
-        cantidad: ing.cantidad,
-        unidad: ing.unidad,
-        costo_unitario: ing.costo_unitario,
-        costo_total: ing.costo_total,
-      }));
+      const ingredientPayloads: RecipeIngredientInsert[] = recipeData.ingredientes.map(ing => {
+        const ingrediente = availableIngredients.find(i => i.id === ing.ingrediente_id);
+
+        if (!ingrediente) {
+          return {
+            receta_id: recipeId,
+            ingrediente_id: ing.ingrediente_id,
+            cantidad: ing.cantidad,
+            unidad: ing.unidad,
+            costo_unitario: 0,
+            costo_total: 0,
+          };
+        }
+
+        const costo_total = calculateIngredientCost(
+          ing.cantidad,
+          ingrediente.precio_por_unidad,
+          ingrediente.unidad_medida,
+          ing.unidad
+        );
+
+        const costo_unitario = costo_total / ing.cantidad;
+
+        return {
+          receta_id: recipeId,
+          ingrediente_id: ing.ingrediente_id,
+          cantidad: ing.cantidad,
+          unidad: ing.unidad,
+          costo_unitario,
+          costo_total,
+        };
+      });
 
       if (ingredientPayloads.length > 0) {
         const { error: ingredientsError } = await supabase
@@ -317,7 +341,7 @@ export function useRecipeCalculations(initialData?: RecipeData) {
     } finally {
       setLoading(false);
     }
-  }, [recipeData, calculations]);
+  }, [recipeData, calculations, availableIngredients]);
 
   // Cargar receta existente
   const loadRecipe = useCallback(async (recipeId: string) => {

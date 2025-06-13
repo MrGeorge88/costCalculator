@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Plus, Minus, Save, Calculator } from 'lucide-react';
 import { useRecipeCalculations } from '@/hooks/useRecipeCalculations';
 import { CostCalculator } from './CostCalculator';
@@ -34,6 +35,7 @@ const UNITS = [
 ];
 
 export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
+  const t = useTranslations('recipes');
   const {
     recipeData,
     calculations,
@@ -82,13 +84,13 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
       {/* Información Básica de la Receta */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-6">
-          {recipeId ? 'Editar Receta' : 'Nueva Receta'}
+          {recipeId ? t('editRecipe') : t('newRecipe')}
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <Input
-              label="Nombre de la Receta"
+              label={t('name')}
               value={recipeData.nombre}
               onChange={(e) => updateRecipeData({ nombre: e.target.value })}
               placeholder="Ej: Helado de Vainilla Clásico"
@@ -97,7 +99,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Descripción
+                {t('description')}
               </label>
               <textarea
                 value={recipeData.descripcion || ''}
@@ -118,7 +120,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
 
           <div className="space-y-4">
             <Input
-              label="Tiempo de Preparación (minutos)"
+              label={t('preparationTimeMinutes')}
               type="number"
               value={recipeData.tiempo_preparacion || ''}
               onChange={(e) => updateRecipeData({ tiempo_preparacion: Number(e.target.value) })}
@@ -127,7 +129,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
 
             <div className="grid grid-cols-2 gap-3">
               <Input
-                label="Rendimiento"
+                label={t('yield')}
                 type="number"
                 value={recipeData.rendimiento}
                 onChange={(e) => updateRecipeData({ rendimiento: Number(e.target.value) })}
@@ -138,7 +140,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
               />
 
               <Select
-                label="Unidad"
+                label={t('unit')}
                 value={recipeData.unidad_rendimiento}
                 onChange={(e) => updateRecipeData({ unidad_rendimiento: e.target.value })}
                 options={UNITS}
@@ -151,7 +153,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
       {/* Ingredientes */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">Ingredientes</h3>
+          <h3 className="text-lg font-semibold text-gray-900">{t('recipeIngredients')}</h3>
           <Button
             onClick={() => setShowCalculator(!showCalculator)}
             variant="outline"
@@ -173,7 +175,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
                 value: ing.id,
                 label: `${ing.nombre} (${ing.precio_por_unidad}/${ing.unidad_medida})`
               }))}
-              placeholder="Seleccionar ingrediente..."
+              placeholder={t('selectIngredient')}
             />
           </div>
           <Button
@@ -182,7 +184,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
             className="flex items-center space-x-2"
           >
             <Plus className="w-4 h-4" />
-            <span>Agregar</span>
+            <span>{t('add')}</span>
           </Button>
         </div>
 
@@ -236,8 +238,8 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
 
           {recipeData.ingredientes.length === 0 && (
             <div className="text-center py-8 text-gray-500">
-              <p>No hay ingredientes agregados.</p>
-              <p className="text-sm">Selecciona un ingrediente arriba para comenzar.</p>
+              <p>{t('noIngredients')}</p>
+              <p className="text-sm">{t('selectIngredientToStart')}</p>
             </div>
           )}
         </div>
@@ -266,7 +268,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
             onClick={onCancel}
             variant="outline"
           >
-            Cancelar
+            {t('cancel')}
           </Button>
         )}
 
@@ -276,7 +278,7 @@ export function RecipeForm({ recipeId, onSave, onCancel }: RecipeFormProps) {
           className="flex items-center space-x-2"
         >
           <Save className="w-4 h-4" />
-          <span>{loading ? 'Guardando...' : 'Guardar Receta'}</span>
+          <span>{loading ? t('saving') : t('save')}</span>
         </Button>
       </div>
 
