@@ -35,8 +35,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const { isOpen, close } = useSidebar();
 
-  // Debug: Log sidebar state
-  console.log('Sidebar render - isOpen:', isOpen);
+
 
   // Close sidebar on mobile when clicking outside
   useEffect(() => {
@@ -66,13 +65,8 @@ export function Sidebar() {
         )}
       </AnimatePresence>
 
-      {/* Sidebar - POSICIONAMIENTO FIJO COMO PREFIERES */}
-      <motion.aside
-        initial={false}
-        animate={{
-          width: isOpen ? 240 : 72
-        }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+      {/* Sidebar - POSICIONAMIENTO FIJO A LA IZQUIERDA */}
+      <aside
         className={cn(
           // Base: flex column con posicionamiento fijo
           "flex flex-col",
@@ -80,13 +74,9 @@ export function Sidebar() {
           "fixed inset-y-0 left-0 z-50",
           // Estilos visuales
           "bg-white shadow-lg border-r border-gray-200 overflow-hidden",
-          // Debug: hacer más visible
-          "border-4 border-red-500"
+          // Width dinámica
+          isOpen ? "w-60" : "w-18"
         )}
-        style={{
-          width: isOpen ? '240px' : '72px',
-          display: 'flex' // Forzar que siempre sea visible
-        }}
       >
         {/* Search Section - Only when expanded */}
         <AnimatePresence>
@@ -190,7 +180,7 @@ export function Sidebar() {
             )}
           </AnimatePresence>
         </div>
-      </motion.aside>
+      </aside>
     </>
   );
 }

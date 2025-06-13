@@ -307,6 +307,10 @@ button:active {
   .ml-60 {
     margin-left: 15rem; /* 240px */
   }
+
+  .w-18 {
+    width: 4.5rem; /* 72px */
+  }
 }
 
 /* Responsive */
